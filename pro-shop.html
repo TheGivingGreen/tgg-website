@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pro Shop — Headwear · The Giving Green</title>
+<meta name="description" content="The Giving Green Pro Shop. Three caps for the crawl, each carrying the heart-flag. Eight dollars a cap into the pot, split nine ways. October 3, Historic Soulard.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --forest:#1E3A32; --forest-logo:#324E35; --fairway:#718D58;
+  --sand:#F5F0E8; --sand-deep:#EDE6D8; --bunker:#ADA366;
+  --flag:#FC5656; --flag-deep:#E04444; --cream:#FFFCF5;
+  --line:#D8CFBC; --shadow-ink:#142822;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{overflow-x:hidden;width:100%;scroll-behavior:smooth}
+body{background:var(--sand);color:var(--forest);font-family:'DM Sans',system-ui,sans-serif;font-size:17px;line-height:1.6;overflow-x:hidden;width:100%}
+.anton{font-family:'Anton','Arial Narrow',sans-serif;font-weight:400;line-height:.92;text-transform:uppercase;letter-spacing:.01em}
+.serif{font-family:'Playfair Display',Georgia,serif}
+.label{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.ggsymbol{position:absolute;width:0;height:0;overflow:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;width:100%;background:transparent;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;padding:16px clamp(20px,4vw,48px);
+  transition:background .3s,border .3s,box-shadow .3s}
+nav.scrolled{background:var(--sand);border-bottom:2px solid var(--forest);box-shadow:0 2px 12px rgba(20,40,34,.08)}
+nav .brand{display:flex;align-items:center;gap:13px;text-decoration:none}
+nav .mark{width:46px;height:46px;display:block;flex:none}
+nav .name{font-family:'Playfair Display',serif;font-weight:700;font-size:24px;color:var(--cream);transition:color .3s}
+nav.scrolled .name{color:var(--forest)}
+nav .links{display:flex;gap:24px;align-items:center}
+nav .links a.lnk,nav .links span.soonlink{color:var(--cream);text-decoration:none;font-size:13.5px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;position:relative;padding-bottom:3px;transition:color .3s;white-space:nowrap}
+nav.scrolled .links a.lnk,nav.scrolled .links span.soonlink{color:var(--forest)}
+nav .links a.lnk::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--flag);transition:width .22s ease}
+nav .links a.lnk:hover::after{width:100%}
+nav .links a.lnk.active::after{width:100%}
+nav .links a.lnk:hover{opacity:.85}
+.soonlink{display:inline-flex;align-items:center;gap:6px;opacity:.62;cursor:default}
+.soon{font-size:9px;font-weight:700;letter-spacing:.1em;border:1px solid currentColor;border-radius:999px;padding:2px 6px;line-height:1}
+.btn{display:inline-block;border-radius:999px;padding:12px 26px;font-size:13px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;text-decoration:none;cursor:pointer;border:2px solid transparent;transition:all .3s}
+.btn.ghost{border-color:var(--forest);color:var(--forest);background:transparent}
+.btn.ghost:hover{background:var(--forest);color:var(--cream)}
+.btn.ghost.on-dark{border-color:var(--cream);color:var(--cream)}
+.btn.ghost.on-dark:hover{background:var(--cream);color:var(--forest)}
+nav .links a.btn.ghost{border-color:var(--cream);color:var(--cream)}
+nav .links a.btn.ghost:hover{background:var(--cream);color:var(--forest)}
+nav.scrolled .links a.btn.ghost{border-color:var(--forest);color:var(--forest)}
+nav.scrolled .links a.btn.ghost:hover{background:var(--forest);color:var(--cream)}
+.hamb{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;
+  width:44px;height:44px;align-items:center;justify-content:center}
+.hamb span{display:block;width:26px;height:2px;background:var(--cream);transition:background .3s}
+nav.scrolled .hamb span{background:var(--forest)}
+@media(max-width:980px){ nav .links{display:none} .hamb{display:flex} }
+@media(max-width:480px){ nav .name{display:none} }
+
+/* MOBILE MENU */
+.mobnav{position:fixed;inset:0;background:var(--forest);z-index:60;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:4px;opacity:0;pointer-events:none;transition:opacity .18s linear}
+.mobnav.open{opacity:1;pointer-events:auto}
+.mobnav a{color:var(--cream);text-decoration:none;font-family:'Anton',sans-serif;text-transform:uppercase;
+  font-size:clamp(30px,8vw,44px);letter-spacing:.02em;padding:10px 18px}
+.mobnav a:active{opacity:.7}
+.mobnav .soonrow{display:flex;align-items:center;gap:10px;opacity:.6}
+.mobnav .soonrow .soon{font-size:11px}
+.mobnav .ticket{margin-top:22px;border:2px solid var(--cream);border-radius:999px;font-family:'DM Sans',sans-serif;
+  font-size:14px;font-weight:700;letter-spacing:.12em;padding:14px 34px}
+.mobnav .close{position:absolute;top:20px;right:22px;width:46px;height:46px;border:none;background:none;cursor:pointer}
+.mobnav .close::before,.mobnav .close::after{content:"";position:absolute;left:11px;top:22px;width:24px;height:2px;background:var(--cream)}
+.mobnav .close::before{transform:rotate(45deg)} .mobnav .close::after{transform:rotate(-45deg)}
+
+/* HERO */
+.phero{background:var(--forest);color:var(--cream);display:grid;grid-template-columns:1.12fr .88fr;
+  align-items:center;min-height:92vh;min-height:92dvh}
+.phero-copy{padding:clamp(110px,16vh,170px) clamp(24px,4vw,64px) clamp(48px,8vh,90px)}
+.phero .kicker{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--bunker);margin-bottom:18px}
+.phero h1{font-family:'Anton',sans-serif;text-transform:uppercase;line-height:.94;letter-spacing:.01em;font-size:clamp(48px,8vw,104px)}
+.phero p{max-width:46ch;margin:24px 0 0;font-size:clamp(15px,1.7vw,17px);line-height:1.65;color:rgba(255,252,245,.86)}
+.phero-art{align-self:stretch;background:#16302a;display:flex;align-items:center;justify-content:center;
+  padding:clamp(40px,6vw,80px);border-left:1px solid rgba(245,240,232,.14)}
+.phero-art .hatwrap{width:78%;max-width:330px}
+.hatwrap{position:relative;width:100%;line-height:0}
+.hatwrap .hat{width:100%;height:auto;display:block}
+.hatwrap .emb{position:absolute;left:50%;top:51%;transform:translate(-50%,-50%);width:27%;height:auto}
+
+/* STRIP */
+.strip{display:flex;align-items:center;justify-content:center;gap:14px;background:var(--sand-deep);
+  border-bottom:1px solid var(--line);padding:16px 24px;text-align:center;flex-wrap:wrap}
+.strip .tag{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;
+  background:var(--flag);padding:5px 12px;border-radius:999px}
+.strip .note{font-size:14px;color:#3a4a40}
+.strip .note strong{color:var(--forest)}
+
+/* BANDS */
+.band{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;background:var(--sand);border-top:1px solid var(--line)}
+.band.dark{background:var(--forest);border-top:1px solid rgba(245,240,232,.14)}
+.band .art{display:flex;align-items:center;justify-content:center;padding:clamp(36px,5vw,76px);background:var(--sand-deep)}
+.band.dark .art{background:#16302a}
+.band .copy{padding:clamp(36px,5vw,76px);display:flex;flex-direction:column;gap:14px;justify-content:center}
+.band.rev .art{order:2} .band.rev .copy{order:1}
+.band .art .hatwrap{width:74%;max-width:330px}
+.copy .bignum{font-size:clamp(40px,5vw,64px);line-height:.9;color:rgba(30,58,50,.16)}
+.band.dark .copy .bignum{color:rgba(173,163,102,.42)}
+.copy .sub{color:var(--fairway)}
+.band.dark .copy .sub{color:var(--bunker)}
+.copy .name{font-size:clamp(32px,4.4vw,56px);color:var(--forest)}
+.band.dark .copy .name{color:var(--cream)}
+.copy .blurb{font-size:clamp(16px,1.7vw,19px);line-height:1.55;max-width:42ch;color:var(--forest)}
+.band.dark .copy .blurb{color:rgba(255,252,245,.9)}
+.copy .price{font-weight:700;color:var(--forest)} .copy .price .muted{font-weight:400;color:var(--fairway)}
+.band.dark .copy .price{color:var(--cream)} .band.dark .copy .price .muted{color:var(--bunker)}
+.chiprow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.chips{display:flex;gap:10px}
+.chip{width:28px;height:28px;border-radius:50%;border:2px solid var(--forest);cursor:pointer;padding:0;transition:outline-color .14s linear}
+.band.dark .chip{border-color:var(--sand)}
+.chip[aria-pressed="true"]{outline:3px solid var(--flag);outline-offset:2px}
+.wearing{font-size:14px;color:var(--fairway)} .wearing .serif{font-style:italic;color:var(--forest)}
+.band.dark .wearing{color:var(--bunker)} .band.dark .wearing .serif{color:var(--cream)}
+.copy .btn{align-self:flex-start;margin-top:6px}
+
+/* CLOSING */
+.closing{background:var(--shadow-ink);color:var(--cream);text-align:center;padding:clamp(50px,7vw,86px) clamp(24px,4vw,48px)}
+.closing .big{font-family:'Playfair Display',serif;font-style:italic;font-weight:600;font-size:clamp(24px,3.4vw,40px);max-width:24ch;margin:0 auto}
+.closing .label{color:var(--bunker);margin-top:20px}
+
+/* FOOTER */
+footer{background:var(--forest);color:var(--cream);padding:56px clamp(20px,4vw,48px);text-align:center}
+footer .fmark{width:60px;height:60px;margin:0 auto 18px;display:block}
+footer .creed{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(22px,3vw,30px);margin-bottom:10px}
+footer .label{color:var(--bunker);margin-bottom:22px}
+footer a{color:var(--bunker)} footer a:hover{opacity:.7}
+footer .small{font-size:13px;color:rgba(255,252,245,.55);margin-top:18px}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .5s linear,transform .5s cubic-bezier(.2,0,.2,1)}
+.reveal.inview{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+@media(max-width:820px){
+  .phero{grid-template-columns:1fr;min-height:auto}
+  .phero-copy{padding-top:clamp(104px,16vh,140px)}
+  .phero-art{border-left:none;border-top:1px solid rgba(245,240,232,.14);padding:48px 24px 60px}
+  .phero-art .hatwrap{width:62%;max-width:280px}
+  .band,.band.rev{grid-template-columns:1fr}
+  .band .art,.band.rev .art{order:0} .band .copy,.band.rev .copy{order:0}
+  .band .art .hatwrap{width:60%;max-width:260px}
+}
+</style>
+</head>
+<body>
+
+<div class="ggsymbol"><svg xmlns="http://www.w3.org/2000/svg"><symbol id="ggmark" viewBox="0 0 200 200"><g transform="translate(-70.1 -94.4) scale(0.036)">
+<g class="m-ink">
+<path style="stroke: rgb(193,193,193); stroke-opacity: 1.00; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(50,78,53); fill-opacity: 1.00; fill-rule: nonzero; opacity: 1;" transform="matrix(17.03888 0 0 17.03888 4724.999961 5399.999959) matrix(1 0 0 1 0 0)  translate(-125.081989, -132.899546)" d="M 116.50 258.40 C 107.71 251.25 98.25 244.79 81.50 234.52 C 58.76 220.58 43.41 208.42 31.35 194.80 C -4.40 154.43 -8.84 102.68 20.90 73.05 C 32.71 61.29 45.93 56.00 63.52 56.00 C 75.37 56.00 85.52 58.32 96.53 63.55 C 100.53 65.45 104.08 67.00 104.40 67.00 C 105.37 67.00 105.12 58.07 103.37 30.19 C 102.12 10.44 102.00 3.60 102.86 2.74 C 104.36 1.24 117.89 0.31 125.50 1.19 C 128.80 1.57 137.12 3.55 144.00 5.58 C 164.44 11.62 167.04 12.13 177.75 12.20 C 183.39 12.23 188.00 12.58 188.00 12.97 C 188.00 13.37 186.27 16.37 184.15 19.65 C 176.86 30.93 169.33 35.02 151.18 37.57 C 137.11 39.54 136.34 39.76 130.00 43.55 C 119.88 49.61 119.55 50.25 119.17 64.95 L 118.85 77.75 L 122.03 81.38 C 123.78 83.37 125.60 85.00 126.07 85.00 C 126.55 85.00 129.92 82.06 133.56 78.47 C 147.41 64.83 160.91 58.15 179.07 55.94 C 211.36 52.01 238.71 71.75 247.13 105.05 C 248.94 112.20 249.17 115.30 248.71 126.46 C 248.08 141.94 246.04 149.96 239.03 164.50 C 225.42 192.73 201.80 215.66 164.21 237.17 C 151.30 244.55 134.68 256.40 129.56 261.86 C 127.95 263.59 126.15 264.98 125.56 264.95 C 124.98 264.93 120.90 261.98 116.50 258.40 Z M 122.11 252.10 L 125.27 255.05 L 128.38 252.49 C 135.51 246.63 144.52 240.11 149.83 236.97 C 177.35 220.69 197.89 206.06 207.55 195.88 C 214.08 189.00 224.24 175.85 227.81 169.67 L 230.02 165.85 L 227.74 162.93 C 222.20 155.85 208.47 147.69 192.83 142.17 C 174.24 135.61 157.30 133.00 133.39 133.00 L 120.00 133.00 L 120.00 158.74 L 124.48 159.99 C 129.70 161.46 131.28 163.00 130.83 166.19 C 129.92 172.61 110.10 175.86 99.85 171.28 C 92.00 167.77 92.53 162.66 101.02 160.11 L 105.00 158.92 L 105.00 147.05 C 105.00 136.28 104.84 135.22 103.25 135.56 C 102.29 135.76 97.00 136.82 91.50 137.91 C 61.08 143.94 45.70 155.74 53.25 167.25 C 55.08 170.05 63.04 174.19 75.00 178.57 C 80.57 180.60 83.72 182.52 87.25 186.01 C 91.61 190.33 92.00 191.11 92.00 195.53 C 92.00 199.90 91.60 200.73 87.69 204.47 C 85.33 206.74 80.15 210.15 76.19 212.05 C 72.24 213.95 69.00 215.79 69.00 216.15 C 69.00 216.93 80.44 224.33 95.00 232.96 C 105.91 239.43 116.69 247.04 122.11 252.10 Z M 58.50 207.80 C 60.70 208.95 63.40 209.64 64.50 209.34 C 71.96 207.27 80.33 201.68 81.51 197.98 C 81.91 196.71 81.05 194.48 79.02 191.53 C 76.41 187.74 74.35 186.27 66.21 182.42 C 53.50 176.41 49.26 173.43 46.92 168.85 C 38.41 152.16 59.80 137.05 101.25 130.50 L 105.00 129.91 L 105.00 77.27 L 101.25 74.69 C 96.07 71.11 87.63 67.39 80.54 65.55 C 73.71 63.78 56.81 63.52 50.03 65.08 C 38.14 67.82 25.33 77.05 19.17 87.32 C 5.13 110.71 4.75 134.47 17.98 162.69 C 26.93 181.80 43.04 199.73 58.50 207.80 Z M 229.40 155.83 C 231.00 157.53 232.64 158.72 233.04 158.47 C 234.75 157.42 239.02 144.55 240.54 135.87 C 246.85 99.86 225.87 67.62 193.76 63.97 C 178.93 62.29 164.40 65.42 151.26 73.12 C 148.09 74.98 141.33 80.66 136.23 85.75 C 131.14 90.84 126.69 95.00 126.35 95.00 C 126.01 95.00 124.69 93.78 123.41 92.29 C 122.13 90.80 120.86 89.81 120.58 90.09 C 120.31 90.36 120.02 98.89 119.95 109.04 L 119.82 127.50 L 140.16 128.16 C 164.71 128.95 177.59 131.11 197.00 137.69 C 210.84 142.39 223.40 149.42 229.40 155.83 Z M 108.00 25.39 C 108.00 37.05 108.39 46.00 108.91 46.00 C 109.41 46.00 112.82 44.65 116.50 43.00 C 126.20 38.65 135.17 36.23 146.35 34.96 C 162.18 33.16 166.77 30.96 173.12 22.10 L 177.13 16.50 L 168.24 15.86 C 161.48 15.37 155.87 14.07 144.92 10.43 C 131.91 6.11 129.40 5.60 119.25 5.21 L 108.00 4.78 Z M 110.61 148.25 C 111.12 164.01 111.53 168.00 112.63 168.00 C 113.77 168.00 114.00 158.58 114.00 110.58 C 114.00 79.00 114.27 52.45 114.61 51.58 C 115.27 49.85 114.25 49.56 112.16 50.88 C 111.09 51.56 110.73 59.49 110.39 90.11 C 110.15 111.23 110.25 137.39 110.61 148.25 Z" stroke-linecap="round"></path>
+</g>
+<g class="m-f">
+<path style="stroke: rgb(193,193,193); stroke-opacity: 1.00; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(113,141,88); fill-opacity: 1.00; fill-rule: nonzero; opacity: 1;" transform="matrix(17.03888 0 0 17.03888 4724.999961 5399.999959) matrix(1 0 0 1 -0.081552 9.36477)  translate(-125.000437, -142.264315)" d="M 58.50 207.80 C 43.04 199.73 26.93 181.80 17.98 162.69 C 4.75 134.47 5.13 110.71 19.17 87.32 C 25.33 77.05 38.14 67.82 50.03 65.08 C 56.81 63.52 73.71 63.78 80.54 65.55 C 87.63 67.39 96.07 71.11 101.25 74.69 L 105.00 77.27 L 105.00 129.91 L 101.25 130.50 C 59.80 137.05 38.41 152.16 46.92 168.85 C 49.26 173.43 53.50 176.41 66.21 182.42 C 74.35 186.27 76.41 187.74 79.02 191.53 C 81.05 194.48 81.91 196.71 81.51 197.98 C 80.33 201.68 71.96 207.27 64.50 209.34 C 63.40 209.64 60.70 208.95 58.50 207.80 Z M 229.40 155.83 C 223.40 149.42 210.84 142.39 197.00 137.69 C 177.59 131.11 164.71 128.95 140.16 128.16 L 119.82 127.50 L 119.95 109.04 C 120.02 98.89 120.31 90.36 120.58 90.09 C 120.86 89.81 122.13 90.80 123.41 92.29 C 124.69 93.78 126.01 95.00 126.35 95.00 C 126.69 95.00 131.14 90.84 136.23 85.75 C 141.33 80.66 148.09 74.98 151.26 73.12 C 164.40 65.42 178.93 62.29 193.76 63.97 C 225.87 67.62 246.85 99.86 240.54 135.87 C 239.02 144.55 234.75 157.42 233.04 158.47 C 232.64 158.72 231.00 157.53 229.40 155.83 Z M 194.00 187.00 C 194.00 187.55 193.55 188.00 193.00 188.00 C 192.45 188.00 192.00 187.55 192.00 187.00 C 192.00 186.45 192.45 186.00 193.00 186.00 C 193.55 186.00 194.00 186.45 194.00 187.00 Z M 205.00 187.00 C 205.00 187.55 204.55 188.00 204.00 188.00 C 203.45 188.00 203.00 187.55 203.00 187.00 C 203.00 186.45 203.45 186.00 204.00 186.00 C 204.55 186.00 205.00 186.45 205.00 187.00 Z M 162.00 199.00 C 162.00 199.55 161.55 200.00 161.00 200.00 C 160.45 200.00 160.00 199.55 160.00 199.00 C 160.00 198.45 160.45 198.00 161.00 198.00 C 161.55 198.00 162.00 198.45 162.00 199.00 Z M 189.00 203.00 C 189.00 203.55 188.55 204.00 188.00 204.00 C 187.45 204.00 187.00 203.55 187.00 203.00 C 187.00 202.45 187.45 202.00 188.00 202.00 C 188.55 202.00 189.00 202.45 189.00 203.00 Z M 178.00 204.00 C 178.00 204.55 177.55 205.00 177.00 205.00 C 176.45 205.00 176.00 204.55 176.00 204.00 C 176.00 203.45 176.45 203.00 177.00 203.00 C 177.55 203.00 178.00 203.45 178.00 204.00 Z M 173.00 209.00 C 173.00 209.55 172.55 210.00 172.00 210.00 C 171.45 210.00 171.00 209.55 171.00 209.00 C 171.00 208.45 171.45 208.00 172.00 208.00 C 172.55 208.00 173.00 208.45 173.00 209.00 Z M 142.00 220.00 C 142.00 220.55 141.55 221.00 141.00 221.00 C 140.45 221.00 140.00 220.55 140.00 220.00 C 140.00 219.45 140.45 219.00 141.00 219.00 C 141.55 219.00 142.00 219.45 142.00 220.00 Z" stroke-linecap="round"></path>
+</g>
+<g class="m-b">
+<path style="stroke: rgb(193,193,193); stroke-opacity: 1.00; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(173,163,102); fill-opacity: 1.00; fill-rule: nonzero; opacity: 1;" transform="matrix(17.03888 0 0 17.03888 4724.999961 5399.999959) matrix(1 0 0 1 15.602389 19.653562)  translate(-140.684378, -152.553107)" d="M 122.11 252.10 C 116.69 247.04 105.91 239.43 95.00 232.96 C 80.44 224.33 69.00 216.93 69.00 216.15 C 69.00 215.79 72.24 213.95 76.19 212.05 C 80.15 210.15 85.33 206.74 87.69 204.47 C 91.60 200.73 92.00 199.90 92.00 195.53 C 92.00 191.11 91.61 190.33 87.25 186.01 C 83.72 182.52 80.57 180.60 75.00 178.57 C 63.04 174.19 55.08 170.05 53.25 167.25 C 45.70 155.74 61.08 143.94 91.50 137.91 C 97.00 136.82 102.29 135.76 103.25 135.56 C 104.84 135.22 105.00 136.28 105.00 147.05 L 105.00 158.92 L 101.02 160.11 C 92.53 162.66 92.00 167.77 99.85 171.28 C 110.10 175.86 129.92 172.61 130.83 166.19 C 131.28 163.00 129.70 161.46 124.48 159.99 L 120.00 158.74 L 120.00 133.00 L 133.39 133.00 C 157.30 133.00 174.24 135.61 192.83 142.17 C 208.47 147.69 222.20 155.85 227.74 162.93 L 230.02 165.85 L 227.81 169.67 C 224.24 175.85 214.08 189.00 207.55 195.88 C 197.89 206.06 177.35 220.69 149.83 236.97 C 144.52 240.11 135.51 246.63 128.38 252.49 L 125.27 255.05 Z M 110.61 148.25 C 110.25 137.39 110.15 111.23 110.39 90.11 C 110.73 59.49 111.09 51.56 112.16 50.88 C 114.25 49.56 115.27 49.85 114.61 51.58 C 114.27 52.45 114.00 79.00 114.00 110.58 C 114.00 158.58 113.77 168.00 112.63 168.00 C 111.53 168.00 111.12 164.01 110.61 148.25 Z M 194.00 187.00 C 194.00 186.45 193.55 186.00 193.00 186.00 C 192.45 186.00 192.00 186.45 192.00 187.00 C 192.00 187.55 192.45 188.00 193.00 188.00 C 193.55 188.00 194.00 187.55 194.00 187.00 Z M 205.00 187.00 C 205.00 186.45 204.55 186.00 204.00 186.00 C 203.45 186.00 203.00 186.45 203.00 187.00 C 203.00 187.55 203.45 188.00 204.00 188.00 C 204.55 188.00 205.00 187.55 205.00 187.00 Z M 162.00 199.00 C 162.00 198.45 161.55 198.00 161.00 198.00 C 160.45 198.00 160.00 198.45 160.00 199.00 C 160.00 199.55 160.45 200.00 161.00 200.00 C 161.55 200.00 162.00 199.55 162.00 199.00 Z M 189.00 203.00 C 189.00 202.45 188.55 202.00 188.00 202.00 C 187.45 202.00 187.00 202.45 187.00 203.00 C 187.00 203.55 187.45 204.00 188.00 204.00 C 188.55 204.00 189.00 203.55 189.00 203.00 Z M 178.00 204.00 C 178.00 203.45 177.55 203.00 177.00 203.00 C 176.45 203.00 176.00 203.45 176.00 204.00 C 176.00 204.55 176.45 205.00 177.00 205.00 C 177.55 205.00 178.00 204.55 178.00 204.00 Z M 173.00 209.00 C 173.00 208.45 172.55 208.00 172.00 208.00 C 171.45 208.00 171.00 208.45 171.00 209.00 C 171.00 209.55 171.45 210.00 172.00 210.00 C 172.55 210.00 173.00 209.55 173.00 209.00 Z M 142.00 220.00 C 142.00 219.45 141.55 219.00 141.00 219.00 C 140.45 219.00 140.00 219.45 140.00 220.00 C 140.00 220.55 140.45 221.00 141.00 221.00 C 141.55 221.00 142.00 220.55 142.00 220.00 Z" stroke-linecap="round"></path>
+</g>
+<g class="m-fl">
+<path style="stroke: rgb(193,193,193); stroke-opacity: 1.00; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(252,86,86); fill-opacity: 1.00; fill-rule: nonzero; opacity: 1;" transform="matrix(17.03888 0 0 17.03888 4724.999961 5399.999959) matrix(1 0 0 1 17.483011 -107.509545)  translate(-142.565, -25.39)" d="M 108.00 25.39 L 108.00 4.78 L 119.25 5.21 C 129.40 5.60 131.91 6.11 144.92 10.43 C 155.87 14.07 161.48 15.37 168.24 15.86 L 177.13 16.50 L 173.12 22.10 C 166.77 30.96 162.18 33.16 146.35 34.96 C 135.17 36.23 126.20 38.65 116.50 43.00 C 112.82 44.65 109.41 46.00 108.91 46.00 C 108.39 46.00 108.00 37.05 108.00 25.39 Z" stroke-linecap="round"></path>
+</g>
+</g></symbol></svg></div>
+
+<nav id="nav">
+  <a class="brand" href="index.html" aria-label="The Giving Green — home">
+    <svg class="mark" viewBox="0 0 200 200" aria-hidden="true"><use href="#ggmark"/></svg>
+    <span class="name">The Giving Green</span>
+  </a>
+  <div class="links">
+    <a class="lnk" href="index.html">The Crawl</a>
+    <a class="lnk" href="index.html">Charities</a>
+    <span class="soonlink">Year One <span class="soon">Soon</span></span>
+    <a class="lnk active" href="pro-shop.html" aria-current="page">Pro Shop</a>
+    <span class="soonlink">Sponsor Us <span class="soon">Soon</span></span>
+    <a class="lnk" href="index.html">FAQ</a>
+    <a class="btn ghost" href="index.html">Get Tickets</a>
+  </div>
+  <button class="hamb" id="hamb" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobnav" id="mobnav" aria-hidden="true">
+  <button class="close" id="mobclose" aria-label="Close menu"></button>
+  <a href="index.html">The Crawl</a>
+  <a href="index.html">Charities</a>
+  <div class="soonrow"><a href="#" onclick="return false">Year One</a><span class="soon">Soon</span></div>
+  <a href="pro-shop.html">Pro Shop</a>
+  <div class="soonrow"><a href="#" onclick="return false">Sponsor Us</a><span class="soon">Soon</span></div>
+  <a href="index.html">FAQ</a>
+  <a class="ticket" href="index.html">Get Tickets</a>
+</div>
+
+<header class="phero">
+  <div class="phero-copy">
+    <div class="kicker" style="font-size: 20px">The Pro Shop &middot; Headwear &middot; Limited</div>
+    <h1 >HATS THAT 
+GIVE A PUTT.</h1>
+    <p>Three caps for the crawl, each carrying the heart-flag. They aren&rsquo;t your ticket &mdash; the shirt does that. They&rsquo;re the thing you keep. Eight dollars a cap into the pot, split nine ways.</p>
+  </div>
+  <div class="phero-art">
+    <div class="hatwrap"><svg class="hat" viewBox="0 0 240 175" xmlns="http://www.w3.org/2000/svg">
+  <path class="h-brim" d="M 38 122 Q 120 168 204 122 Q 162 134 120 135 Q 78 134 38 122 Z" fill="#E04444" stroke="#1E3A32" stroke-width="3.5" stroke-linejoin="round"/>
+  <path class="h-crown" d="M 54 122 C 54 56 84 42 120 42 C 156 42 186 56 186 122 Z" fill="#FC5656" stroke="#1E3A32" stroke-width="3.5" stroke-linejoin="round"/>
+  <path class="h-seam" d="M120 42 L120 122 M94 46 C86 74 84 98 84 122 M146 46 C156 74 156 98 156 122" fill="none" stroke="#1E3A32" stroke-width="2" opacity="0.5"/>
+  <circle class="h-crown" cx="120" cy="44" r="5" fill="#FC5656" stroke="#1E3A32" stroke-width="3"/>
+</svg><svg class="emb" viewBox="0 0 200 200" aria-hidden="true"><use href="#ggmark"/></svg></div>
+  </div>
+</header>
+
+<div class="strip">
+  <span class="tag">Merch &middot; Fore Good</span>
+  <span class="note"> $8 from every cap goes in the pot, split nine ways.</span>
+</div>
+
+<section class="band" data-hat>
+  <div class="art reveal">
+    <div class="hatwrap"><svg class="hat" viewBox="0 0 240 175" xmlns="http://www.w3.org/2000/svg">
+  <path class="h-brim" d="M 38 122 Q 120 168 204 122 Q 162 134 120 135 Q 78 134 38 122 Z" fill="#16302a" stroke="#1E3A32" stroke-width="3.5" stroke-linejoin="round"/>
+  <path class="h-crown" d="M 54 122 C 54 56 84 42 120 42 C 156 42 186 56 186 122 Z" fill="#1E3A32" stroke="#1E3A32" stroke-width="3.5" stroke-linejoin="round"/>
+  <path class="h-seam" d="M120 42 L120 122 M94 46 C86 74 84 98 84 122 M146 46 C156 74 156 98 156 122" fill="none" stroke="#7E8672" stroke-width="2" opacity="0.5"/>
+  <circle class="h-crown" cx="120" cy="44" r="5" fill="#1E3A32" stroke="#1E3A32" stroke-width="3"/>
+</svg><svg class="emb" viewBox="0 0 200 200" aria-hidden="true"><use href="#ggmark"/></svg></div>
+  </div>
+  <div class="copy reveal">
+    <span class="bignum anton">No. 01</span>
+    <span class="sub label">Structured 6-panel · curved brim</span>
+    <h2 class="name anton">The Clubhouse Cap</h2>
+    <p class="blurb serif">Stiff front, structured crown, the heart-flag sitting dead center. The one you pull on for the 12:58 tee time at the first bar.</p>
+    <span class="price">$36 <span class="muted">&middot; $8 a cap into the pot</span></span>
+    <div class="chiprow">
+      <div class="chips" role="group" aria-label="Colorways"><button class="chip" style="background:#1E3A32" data-crown="#1E3A32" data-brim="#16302a" data-seam="#7E8672" data-name="Fairway Forest" aria-pressed="true" aria-label="Fairway Forest"></button><button class="chip" style="background:#F5F0E8" data-crown="#F5F0E8" data-brim="#E7DFCF" data-seam="#1E3A32" data-name="Bunker Sand" aria-pressed="false" aria-label="Bunker Sand"></button><button class="chip" style="background:#FC5656" data-crown="#FC5656" data-brim="#E04444" data-seam="#1E3A32" data-name="Flagstick Coral" aria-pressed="false" aria-label="Flagstick Coral"></button></div>
+      <span class="wearing">Wearing <span class="serif" data-color-out>Fairway Forest</span></span>
+    </div>
+    <a class="btn ghost" href="#" aria-disabled="true">Pre-Order &mdash; Coming Soon</a>
+  </div>
+</section>
+<section class="band dark rev" data-hat>
+  <div class="art reveal">
+    <div class="hatwrap"><svg class="hat" viewBox="0 0 240 175" xmlns="http://www.w3.org/2000/svg">
+  <path class="h-brim" d="M 40 124 Q 120 172 206 122 Q 164 138 120 139 Q 76 138 40 124 Z" fill="#E7DFCF" stroke="#1E3A32" stroke-width="3.5" stroke-linejoin="round"/>
+  <path class="h-crown" d="M 56 124 C 56 76 82 60 120 60 C 160 60 184 78 184 124 Z" fill="#F5F0E8" stroke="#1E3A32" stroke-width="3.5" stroke-linejoin="round"/>
+  <path class="h-seam" d="M120 62 L120 124 M97 64 C90 86 88 104 88 124 M143 64 C150 86 152 104 152 124" fill="none" stroke="#1E3A32" stroke-width="2" opacity="0.4"/>
+</svg><svg class="emb" viewBox="0 0 200 200" aria-hidden="true"><use href="#ggmark"/></svg></div>
+  </div>
+  <div class="copy reveal">
+    <span class="bignum anton">No. 02</span>
+    <span class="sub label">Unstructured · soft crown · adjustable</span>
+    <h2 class="name anton">The Soulard Slouch</h2>
+    <p class="blurb serif">Soft, unstructured, broken in on day one. Adjustable out back so it fits every head that rolls through all nine holes.</p>
+    <span class="price">$32 <span class="muted">&middot; $8 a cap into the pot</span></span>
+    <div class="chiprow">
+      <div class="chips" role="group" aria-label="Colorways"><button class="chip" style="background:#F5F0E8" data-crown="#F5F0E8" data-brim="#E7DFCF" data-seam="#1E3A32" data-name="Bunker Sand" aria-pressed="true" aria-label="Bunker Sand"></button><button class="chip" style="background:#1E3A32" data-crown="#1E3A32" data-brim="#16302a" data-seam="#7E8672" data-name="Fairway Forest" aria-pressed="false" aria-label="Fairway Forest"></button><button class="chip" style="background:#FC5656" data-crown="#FC5656" data-brim="#E04444" data-seam="#1E3A32" data-name="Flagstick Coral" aria-pressed="false" aria-label="Flagstick Coral"></button></div>
+      <span class="wearing">Wearing <span class="serif" data-color-out>Bunker Sand</span></span>
+    </div>
+    <a class="btn ghost on-dark" href="#" aria-disabled="true">Pre-Order &mdash; Coming Soon</a>
+  </div>
+</section>
+<section class="band" data-hat>
+  <div class="art reveal">
+    <div class="hatwrap"><svg class="hat" viewBox="0 0 240 175" xmlns="http://www.w3.org/2000/svg">
+  <path class="h-brim" d="M 38 120 Q 120 152 202 120 Q 160 130 120 131 Q 80 130 38 120 Z" fill="#16302a" stroke="#1E3A32" stroke-width="3.5" stroke-linejoin="round"/>
+  <path class="h-crown" d="M 54 120 C 54 60 84 48 120 48 C 156 48 186 60 186 120 Z" fill="#1E3A32" stroke="#1E3A32" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M 52 107 Q 120 99 188 107" fill="none" stroke="#ADA366" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M 52 114 Q 120 106 188 114" fill="none" stroke="#ADA366" stroke-width="4.5" stroke-linecap="round"/>
+  <circle cx="52" cy="110.5" r="5" fill="#ADA366" stroke="#1E3A32" stroke-width="2"/>
+  <circle cx="188" cy="110.5" r="5" fill="#ADA366" stroke="#1E3A32" stroke-width="2"/>
+</svg><svg class="emb" viewBox="0 0 200 200" aria-hidden="true"><use href="#ggmark"/></svg></div>
+  </div>
+  <div class="copy reveal">
+    <span class="bignum anton">No. 03</span>
+    <span class="sub label">Rope front · foam · flat brim</span>
+    <h2 class="name anton">The Captain’s Rope</h2>
+    <p class="blurb serif">Gold rope across the front, foam where it counts. Equal parts marina and back nine — and entirely Soulard.</p>
+    <span class="price">$34 <span class="muted">&middot; $8 a cap into the pot</span></span>
+    <div class="chiprow">
+      <div class="chips" role="group" aria-label="Colorways"><button class="chip" style="background:#1E3A32" data-crown="#1E3A32" data-brim="#16302a" data-seam="#7E8672" data-name="Fairway Forest" aria-pressed="true" aria-label="Fairway Forest"></button><button class="chip" style="background:#FC5656" data-crown="#FC5656" data-brim="#E04444" data-seam="#1E3A32" data-name="Flagstick Coral" aria-pressed="false" aria-label="Flagstick Coral"></button><button class="chip" style="background:#F5F0E8" data-crown="#F5F0E8" data-brim="#E7DFCF" data-seam="#1E3A32" data-name="Bunker Sand" aria-pressed="false" aria-label="Bunker Sand"></button></div>
+      <span class="wearing">Wearing <span class="serif" data-color-out>Fairway Forest</span></span>
+    </div>
+    <a class="btn ghost" href="#" aria-disabled="true">Pre-Order &mdash; Coming Soon</a>
+  </div>
+</section>
+
+<footer>
+  <svg class="fmark" viewBox="0 0 200 200" aria-hidden="true"><use href="#ggmark"/></svg>
+  <div class="creed">The Giving Green</div>
+  <div class="label">PARTY FORE THE RIGHT REASONS</div>
+  <div>Questions? <a href="/cdn-cgi/l/email-protection#dbbabfb6b2b59bafb3bebcb2adb2b5bcbca9bebeb5f5b4a9bc"><span class="__cf_email__" data-cfemail="5c3d383135321c2834393b352a35323b3b2e39393272332e3b">[email&#160;protected]</span></a></div>
+  <div class="small">The Party Fore Good &middot; Saturday, October 3, 2026 &middot; 1&ndash;6 PM</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+(function(){
+  var nav=document.getElementById('nav');
+  function checkNav(){nav.classList.toggle('scrolled',scrollY>80);}
+  addEventListener('scroll',checkNav,{passive:true}); checkNav();
+
+  var hamb=document.getElementById('hamb'), mob=document.getElementById('mobnav'), close=document.getElementById('mobclose');
+  function openMenu(){mob.classList.add('open');mob.setAttribute('aria-hidden','false');hamb.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}
+  function closeMenu(){mob.classList.remove('open');mob.setAttribute('aria-hidden','true');hamb.setAttribute('aria-expanded','false');document.body.style.overflow='';}
+  hamb.addEventListener('click',openMenu);
+  close.addEventListener('click',closeMenu);
+  mob.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){setTimeout(closeMenu,10);});});
+
+  // color chips
+  document.querySelectorAll('[data-hat]').forEach(function(band){
+    var chips=band.querySelectorAll('.chip'), out=band.querySelector('[data-color-out]');
+    var crowns=band.querySelectorAll('.h-crown'), brims=band.querySelectorAll('.h-brim'), seams=band.querySelectorAll('.h-seam');
+    chips.forEach(function(ch){
+      ch.addEventListener('click',function(){
+        chips.forEach(function(c){c.setAttribute('aria-pressed','false');});
+        ch.setAttribute('aria-pressed','true');
+        crowns.forEach(function(p){p.setAttribute('fill',ch.dataset.crown);});
+        brims.forEach(function(p){p.setAttribute('fill',ch.dataset.brim);});
+        seams.forEach(function(p){p.setAttribute('stroke',ch.dataset.seam);});
+        if(out) out.textContent=ch.dataset.name;
+      });
+    });
+  });
+
+  // reveal
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('inview');io.unobserve(e.target);}});},{threshold:.14});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>
+
