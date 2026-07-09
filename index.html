@@ -313,8 +313,8 @@ section.teams{padding:clamp(72px,12vh,140px) clamp(20px,4vw,48px);max-width:1360
 .team-shirt{width:46%;flex:none;display:flex;align-items:center;justify-content:center}
 .team-shirt img{width:100%;max-height:250px;object-fit:contain;display:block}
 .team-body{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0}
-.team-logo{height:60px;display:flex;align-items:center}
-.team-logo img{max-height:60px;max-width:150px;object-fit:contain;object-position:left center}
+.team-logo{height:84px;display:flex;align-items:center}
+.team-logo img{max-height:84px;max-width:min(200px,100%);object-fit:contain;object-position:left center}
 .team-name{font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(17px,1.5vw,20px);line-height:1.15;letter-spacing:.01em;color:var(--forest)}
 .team-mission{font-size:14px;line-height:1.55;color:var(--shadow-ink);flex:1}
 .team-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;flex-wrap:wrap;row-gap:10px}
@@ -326,7 +326,7 @@ section.teams{padding:clamp(72px,12vh,140px) clamp(20px,4vw,48px);max-width:1360
 .teams .team-note{margin-top:36px;font-size:clamp(18px,2vw,24px);color:var(--forest);font-style:italic;font-family:'Playfair Display',serif;font-weight:700}
 .teams .team-fine{margin-top:8px;font-size:14px;color:var(--bunker)}
 @media(max-width:1060px){.team-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:700px){.team-grid{grid-template-columns:1fr}.team-shirt{width:40%}}
+@media(max-width:700px){.team-grid{grid-template-columns:1fr}.team-shirt{width:40%}.team-logo{height:104px}.team-logo img{max-height:104px;max-width:min(240px,100%)}}
 
 /* ===== BACK NINE ===== */
 .backnine{background:var(--bunker);color:var(--cream);padding:clamp(44px,6vh,72px) clamp(20px,4vw,48px);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px}
