@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Giving Green · Sponsor Us · Oct 3, 2026 · Soulard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+:root{--forest:#1E3A32;--shadow-ink:#142822;--fairway:#718D58;--sand:#F5F0E8;--sand-deep:#EDE6D8;--bunker:#ADA366;--flag:#FC5656;--flag-deep:#E04444;--cream:#FFFCF5;--line:#D8CFBC}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--shadow-ink);color:var(--cream)}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.duo{filter:url(#duotone)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+/* nav */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:22px 40px;position:relative;z-index:5}
+.brand{font-family:'Playfair Display',serif;font-weight:700;font-size:1.25rem;color:var(--cream)}
+.nav-links{display:flex;gap:26px;align-items:center}
+.nl{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cream);opacity:.9}
+.nl:hover{color:var(--bunker)}
+.btn-ghost{border:1.5px solid var(--cream);border-radius:999px;padding:10px 20px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.btn-ghost:hover{background:var(--cream);color:var(--forest)}
+@media(max-width:760px){.nav{padding:18px 20px}.nav-links{gap:14px}.nl{display:none}.nl.keep{display:inline}}
+
+/* shared */
+.kicker{font-size:.72rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--bunker)}
+h1,h2{font-family:'Anton',sans-serif;text-transform:uppercase;line-height:.96;letter-spacing:.01em;font-weight:400}
+.sub{font-family:'Playfair Display',serif;font-style:italic;font-weight:600;color:var(--bunker)}
+.red{color:var(--flag)}
+.pill{display:inline-block;background:var(--flag);color:var(--cream);border-radius:999px;padding:15px 34px;font-weight:700;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border:none;font-family:'DM Sans',sans-serif}
+.pill:hover{background:var(--flag-deep)}
+.ghost{display:inline-block;border:1.5px solid var(--cream);border-radius:999px;padding:14px 30px;font-weight:700;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase}
+.ghost:hover{background:var(--cream);color:var(--forest)}
+section{padding:84px 0}
+.on-sand{background:var(--sand);color:var(--forest)}
+.on-sand .kicker{color:var(--bunker)}
+.on-forest{background:var(--forest)}
+.on-ink{background:var(--shadow-ink)}
+
+/* gate */
+#gate{min-height:calc(100vh - 84px);display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.gate-card{max-width:560px;width:100%;text-align:center}
+.gate-card h1{font-size:clamp(2.6rem,7vw,4.2rem)}
+.gate-card .sub{display:block;margin:14px 0 6px;font-size:1.05rem}
+.gate-card p.small{color:var(--fairway);font-size:.92rem;margin-top:10px;line-height:1.55}
+.pwrow{display:flex;gap:10px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+.pwrow input{background:var(--forest);border:1px solid var(--fairway);color:var(--cream);border-radius:999px;padding:14px 22px;font-family:'DM Sans',sans-serif;font-size:.95rem;letter-spacing:.14em;width:min(300px,70vw);text-align:center;outline:none}
+.pwrow input:focus{border-color:var(--bunker)}
+#err{color:var(--flag);font-size:.85rem;font-weight:700;letter-spacing:.06em;margin-top:14px;min-height:1.2em;visibility:hidden}
+#err.show{visibility:visible}
+.shake{animation:sh .35s}
+@keyframes sh{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.gate-foot{margin-top:34px;font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--fairway)}
+
+/* deck page */
+#deck{display:none}
+
+/* hero */
+.hero{position:relative;text-align:center;padding:110px 20px 96px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:url('hero.webp') center/cover;opacity:.16}
+.hero > *{position:relative}
+.hero h1{font-size:clamp(3rem,8.5vw,5.6rem);margin-top:18px}
+.hero .sub{display:block;font-size:1.25rem;margin-top:16px}
+.datebar{display:inline-block;border:1px solid var(--fairway);padding:12px 26px;margin-top:26px;font-size:.82rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--cream)}
+.hero-cta{margin-top:30px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+/* section headers */
+.sec-head{margin-bottom:42px}
+.sec-head h2{font-size:clamp(2rem,5vw,3.2rem);margin-top:14px}
+.sec-head .sub{display:block;margin-top:12px;font-size:1.05rem}
+
+/* concept */
+.split{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center}
+@media(max-width:820px){.split{grid-template-columns:1fr}}
+.bodycopy{font-size:1rem;line-height:1.7}
+.quote{font-family:'Playfair Display',serif;font-style:italic;font-weight:600;font-size:1.15rem;line-height:1.5;color:var(--bunker);margin-top:26px}
+
+/* proof */
+.proof-copy b{color:var(--bunker)}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:38px}
+.stat{background:rgba(255,252,245,.05);padding:24px}
+.stat b{display:block;font-family:'Anton',sans-serif;font-size:2rem;color:var(--bunker)}
+.stat span{font-size:.85rem;line-height:1.4;display:block;margin-top:8px;color:var(--cream)}
+.photostrip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:44px}
+@media(max-width:640px){.photostrip{grid-template-columns:1fr}}
+
+/* course */
+.course-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start}
+@media(max-width:820px){.course-grid{grid-template-columns:1fr}}
+.holes{list-style:none}
+.holes li{display:flex;align-items:center;gap:18px;padding:13px 0;border-bottom:1px solid var(--line);font-family:'Anton',sans-serif;font-size:1.15rem;letter-spacing:.03em;text-transform:uppercase}
+.holes li i{font-family:'DM Sans',sans-serif;font-style:normal;font-weight:700;font-size:.78rem;color:var(--bunker)}
+.caveat{margin-top:18px;font-family:'Playfair Display',serif;font-style:italic;font-size:.95rem}
+.caveat b{color:var(--forest)}
+.redcard{background:var(--flag);color:var(--cream);padding:24px 26px;font-weight:700;font-size:.92rem;letter-spacing:.05em;text-transform:uppercase;line-height:1.5;margin-top:14px}
+
+/* scoring table */
+.scoretable{max-width:720px;margin:0 auto;border:1.5px solid var(--forest);background:var(--cream)}
+.scoretable .row{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;border-bottom:1px solid var(--line);font-size:.98rem}
+.scoretable .row:last-child{border-bottom:none;background:var(--forest);color:var(--cream);font-weight:700}
+.scoretable .pts{font-family:'Anton',sans-serif;font-size:1.25rem}
+.scoretable .row:last-child .pts{color:var(--flag)}
+.score-note{max-width:720px;margin:26px auto 0;text-align:center;font-size:1rem;line-height:1.65}
+.score-note b{font-family:'Anton',sans-serif;font-weight:400;font-size:1.15rem;letter-spacing:.02em}
+
+/* giving */
+.teamnames{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-top:36px}
+.teamnames div{background:rgba(255,252,245,.05);padding:16px 18px;font-weight:700;font-size:.9rem}
+
+/* brand in play vignettes */
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+@media(max-width:820px){.vgrid{grid-template-columns:1fr}}
+.vq{display:flex;gap:22px;align-items:center;padding:34px 26px}
+.vq:nth-child(1){border-bottom:1px solid var(--line)}
+.vq:nth-child(2){border-bottom:1px solid var(--line);border-left:1px solid var(--line)}
+.vq:nth-child(4){border-left:1px solid var(--line)}
+@media(max-width:820px){.vq{border-left:none !important}}
+.vq img{width:38%;max-height:230px;object-fit:contain}
+.vq h3{font-family:'Anton',sans-serif;font-weight:400;font-size:1.05rem;letter-spacing:.03em;text-transform:uppercase}
+.vq p{font-size:.9rem;line-height:1.55;margin-top:8px}
+
+/* tiers */
+.tiergrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:40px}
+.tier{background:var(--forest);padding:0 0 28px}
+.tier .accent{height:6px}
+.tier .inner{padding:26px 26px 0}
+.tier h3{font-size:.82rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--bunker);font-family:'DM Sans',sans-serif}
+.tier .price{font-family:'Anton',sans-serif;font-size:2.3rem;color:var(--cream);margin-top:8px}
+.tier .avail{font-size:.72rem;font-weight:700;letter-spacing:.16em;color:var(--flag);margin-top:4px;text-transform:uppercase}
+.tier ul{list-style:none;margin-top:20px}
+.tier li{font-size:.9rem;line-height:1.5;color:var(--sand);padding:7px 0 7px 18px;position:relative}
+.tier li::before{content:"·";position:absolute;left:0;color:var(--bunker);font-weight:700}
+.tier-rule{margin-top:30px;font-size:.9rem;line-height:1.6;color:var(--sand)}
+.tier-rule b{color:var(--bunker)}
+
+/* scorecard view */
+.cards2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:34px;max-width:760px;margin:44px auto 0;align-items:start}
+.cards2 figure{text-align:center}
+.cards2 img{border:1px solid var(--line);margin:0 auto}
+.cards2 figcaption{font-family:'Playfair Display',serif;font-style:italic;font-weight:600;font-size:.95rem;margin-top:14px;color:var(--forest)}
+.inv-line{max-width:640px;margin:44px auto 0;text-align:center;font-family:'Anton',sans-serif;font-size:1.4rem;letter-spacing:.02em;text-transform:uppercase}
+
+/* why */
+.whygrid{display:grid;grid-template-columns:1fr 1fr;gap:34px 44px;margin-top:40px}
+@media(max-width:820px){.whygrid{grid-template-columns:1fr}}
+.why h3{font-family:'Anton',sans-serif;font-weight:400;font-size:1.1rem;letter-spacing:.03em;text-transform:uppercase}
+.why p{font-size:.95rem;line-height:1.6;margin-top:10px}
+.redband{background:var(--flag);text-align:center;padding:30px 20px;margin-top:56px}
+.redband span{font-family:'Anton',sans-serif;font-size:clamp(1.1rem,3vw,1.6rem);letter-spacing:.04em;text-transform:uppercase;color:var(--cream)}
+
+/* close */
+.close{text-align:center;position:relative;overflow:hidden;padding:110px 20px}
+.close-bg{position:absolute;inset:0;background:url('strip1.webp') center/cover;opacity:.14}
+.close > *{position:relative}
+.close h2{font-size:clamp(2.4rem,7vw,4.4rem)}
+.close .sub{display:block;margin-top:14px;font-size:1.15rem}
+.close .hero-cta{margin-top:34px}
+.contact{margin-top:26px;color:var(--fairway);font-size:.95rem;line-height:1.7}
+.contact a{color:var(--sand);font-weight:700}
+
+footer{background:var(--forest);text-align:center;padding:36px 20px}
+footer .ft-title{font-family:'Anton',sans-serif;font-size:1.5rem;letter-spacing:.04em;color:var(--cream);text-transform:uppercase}
+footer .sub{display:block;margin-top:8px;font-size:.95rem}
+</style>
+</head>
+<body>
+
+<svg aria-hidden="true" style="position:absolute;width:0;height:0">
+  <defs>
+    <filter id="duotone" color-interpolation-filters="sRGB">
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncR type="table" tableValues="0.118 0.961"/>
+        <feFuncG type="table" tableValues="0.227 0.941"/>
+        <feFuncB type="table" tableValues="0.196 0.910"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+</svg>
+
+<nav class="nav">
+  <a class="brand" href="index.html">The Giving Green</a>
+  <div class="nav-links">
+    <a href="index.html#course" class="nl">The Crawl</a>
+    <a href="index.html#good" class="nl">Charities</a>
+    <a href="index.html#proof" class="nl">Year One</a>
+    <a href="pro-shop.html" class="nl">Pro Shop</a>
+    <a href="index.html#faq" class="nl">FAQ</a>
+    <a href="index.html#tickets" class="btn-ghost nl keep">Get Tickets</a>
+  </div>
+</nav>
+
+<!-- GATE -->
+<section id="gate">
+  <div class="gate-card">
+    <span class="kicker">·· Partners Only · Soulard, St. Louis ··</span>
+    <h1>Sponsor Us.</h1>
+    <span class="sub">The Party Fore Good.</span>
+    <p class="small">This section is reserved for our sponsorship partners.<br>Enter the passcode from your Giving Green contact.</p>
+    <div class="pwrow">
+      <input id="pw" type="password" placeholder="PASSCODE" autocomplete="off" autocapitalize="characters">
+      <button id="go" class="pill">Tee Off</button>
+    </div>
+    <div id="err">That's a stroke. Try again.</div>
+    <div class="gate-foot">Saturday, October 3, 2026 · 1 to 6 PM · Soulard</div>
+  </div>
+</section>
+
+<!-- DECK AS PAGE -->
+<div id="deck">
+
+  <header class="hero on-ink">
+    <div class="hero-bg duo"></div>
+    <span class="kicker">·· Sponsorship · 2026 ··</span>
+    <h1>Sponsor the 2026<br>Main Event.</h1>
+    <span class="sub">The Party Fore Good.</span>
+    <div><span class="datebar">Saturday, October 3, 2026 &nbsp;|&nbsp; 1 to 6 PM &nbsp;|&nbsp; Soulard</span></div>
+    <div class="hero-cta">
+      <a class="pill" href="TGG_2026_Sponsorship_Deck.pdf" download>Download the Deck</a>
+      <a class="ghost" href="mailto:ozzie@thegivinggreen.org">Talk to Ozzie</a>
+    </div>
+  </header>
+
+  <!-- 01 CONCEPT -->
+  <section class="on-forest">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">01 · The Concept · Soulard</span>
+        <h2>9 Holes. 9 Drinks.<br><span class="red">9 Charities.</span></h2>
+        <span class="sub">We turn 9 of our favorite local bars into 9 holes of pub golf.</span>
+      </div>
+      <div class="split">
+        <div>
+          <p class="bodycopy">Attendees crawl hole to hole with a scorecard in hand. Ordering each hole's official sponsored drink is the single best move on the card. Finish the round, post your score, and your charity team climbs the leaderboard. Last year that formula sold through 100% of every sponsored drink on the course.</p>
+          <p class="quote">&ldquo;People came for the party and left caring more about the cause than they expected.&rdquo;</p>
+        </div>
+        <img class="duo" src="strip2.webp" alt="Attendees at a Giving Green bar" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 PROOF -->
+  <section class="on-ink">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">02 · The Proof</span>
+        <h2>Year One,<br>In the Books.</h2>
+      </div>
+      <p class="bodycopy proof-copy" style="max-width:720px">Thousands of St. Louisans packed nine bars in Soulard for our first Charity Pub Golf Crawl. When the scorecards were tallied: <b>$20,634 raised</b> for our nine charity partners, <b>1.5M+ social impressions</b>, <b>100% sell-through</b> on every sponsored drink. Not bad for year one. See you October 3.</p>
+      <div class="statgrid">
+        <div class="stat"><b>$20,634</b><span>raised for our nine charity partners</span></div>
+        <div class="stat"><b>1.5M+</b><span>social impressions</span></div>
+        <div class="stat"><b>100%</b><span>beverage sell-through at every hole</span></div>
+        <div class="stat"><b>5+ HRS</b><span>sustained brand exposure on the scorecard</span></div>
+      </div>
+      <div class="photostrip">
+        <img class="duo" src="strip1.webp" alt="Year One crowd" loading="lazy">
+        <img class="duo" src="strip3.webp" alt="Year One in Soulard" loading="lazy">
+        <img class="duo" src="game.webp" alt="Year One mini-game" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 COURSE -->
+  <section class="on-sand">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">03 · The Course · Soulard</span>
+        <h2>The Course.</h2>
+      </div>
+      <div class="course-grid">
+        <div>
+          <ol class="holes">
+            <li><i>01</i> John D. McGurk's</li>
+            <li><i>02</i> Ray's Sportshouse</li>
+            <li><i>03</i> Duke's</li>
+            <li><i>04</i> The Great Grizzly Bear</li>
+            <li><i>05</i> Molly's in Soulard</li>
+            <li><i>06</i> Hi-Hat</li>
+            <li><i>07</i> Big Daddy's</li>
+            <li><i>08</i> D's Place</li>
+            <li><i>09</i> Hammerstone's</li>
+          </ol>
+          <p class="caveat"><b>2026 course in final review.</b> Full lineup ships with ticket launch.</p>
+        </div>
+        <div>
+          <img class="duo" src="strip3.webp" alt="The course through Soulard" loading="lazy">
+          <div class="redcard">Every hole is a sponsored hole. Nine bars, nine signature drinks, nine brands in play.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 SCORECARD MECHANIC -->
+  <section class="on-sand" style="background:var(--sand-deep)">
+    <div class="wrap">
+      <div class="sec-head" style="text-align:center">
+        <span class="kicker">04 · How to Play</span>
+        <h2>The Scorecard Is <span class="red">the Sell.</span></h2>
+        <span class="sub">Just like real golf, the lowest score wins. And one move beats everything else on the card.</span>
+      </div>
+      <div class="scoretable">
+        <div class="row"><span>Skip a bar entirely</span><span class="pts">+2</span></div>
+        <div class="row"><span>Visit a bar</span><span class="pts">+0</span></div>
+        <div class="row"><span>Order any drink (mocktails count too)</span><span class="pts">&minus;1</span></div>
+        <div class="row"><span>Play a sponsored mini-game or challenge</span><span class="pts">&minus;1</span></div>
+        <div class="row"><span>Order the hole's official sponsored drink</span><span class="pts">&minus;2</span></div>
+      </div>
+      <p class="score-note">Minus two strokes for ordering your product. That's not signage, that's the game itself steering every scorecard toward your brand, at all nine holes, for five straight hours. <b>100% sell-through in Year One.</b></p>
+    </div>
+  </section>
+
+  <!-- 05 GIVING -->
+  <section class="on-forest">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">05 · The Giving</span>
+        <h2>$15 of Every Ticket Benefits<br><span class="red">One of 9 Local Charities.</span></h2>
+        <span class="sub">The charity you choose at checkout determines who you support. Shirt color is the team. Turnout decides the leaderboard.</span>
+      </div>
+      <div class="teamnames">
+        <div>St. Louis Hero Network</div>
+        <div>Folds of Honor</div>
+        <div>St. Louis Children's Hospital</div>
+        <div>Make-A-Wish Missouri &amp; Kansas</div>
+        <div>STL Impact Baseball</div>
+        <div>Young Friends of Kids with Cancer</div>
+        <div>St. Jude Children's Research Hospital</div>
+        <div>Stray Rescue of St. Louis</div>
+        <div>Gene Slay's Girls &amp; Boys Club of St. Louis</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 BRAND IN PLAY -->
+  <section class="on-sand">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">06 · Your Brand In Play</span>
+        <h2>Your Product Becomes<br><span class="red">Part of the Game.</span></h2>
+        <span class="sub" style="color:var(--forest)">Not a logo on a banner nobody reads. A mechanic attendees actively play through.</span>
+      </div>
+      <div class="vgrid">
+        <div class="vq">
+          <img src="drink.png" alt="Signature drink with golf ball pick" loading="lazy">
+          <div><h3>Your Signature Drink</h3><p>The hole's official drink, worth minus two strokes. Attendees seek it out because the game rewards it.</p></div>
+        </div>
+        <div class="vq">
+          <img src="scorecard-front.png" alt="Scorecard with sponsor line" loading="lazy">
+          <div><h3>Your Brand on the Scorecard</h3><p>Held in hand for 5+ hours. The longest sustained brand exposure of the day.</p></div>
+        </div>
+        <div class="vq">
+          <img class="duo" src="game.webp" alt="On-premise hole challenge" loading="lazy" style="width:44%;object-fit:cover;max-height:200px">
+          <div><h3>Your Activation, On Premise</h3><p>Banners and a themed hole challenge at your bar, built around your product.</p></div>
+        </div>
+        <div class="vq">
+          <img src="shirts.png" alt="TGG shirts with sponsor logo placement" loading="lazy" style="width:48%">
+          <div><h3>Your Logo in Market</h3><p>Placement across shirts and TGG merchandise, worn well past October 3.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 TIERS -->
+  <section class="on-ink">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">07 · Sponsorship Tiers</span>
+        <h2>Six Holes for Sale.</h2>
+        <span class="sub">Nine holes on the course. The Title Partner's three brands take three. The rest is yours.</span>
+      </div>
+      <div class="tiergrid">
+        <div class="tier">
+          <div class="accent" style="background:var(--flag)"></div>
+          <div class="inner">
+            <h3>Official Category Partner</h3>
+            <div class="price">$10,000</div>
+            <div class="avail">2 Available</div>
+            <ul>
+              <li>Exclusive naming rights: &ldquo;The Official [Category] of The Giving Green&rdquo;</li>
+              <li>Two sponsored holes, your signature drink at each</li>
+              <li>Back-of-scorecard logo beside the Title Partner</li>
+              <li>Incorporation into the official drink menu</li>
+              <li>Activation space at both holes</li>
+              <li>10 complimentary team tickets</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tier">
+          <div class="accent" style="background:var(--bunker)"></div>
+          <div class="inner">
+            <h3>Signature Hole Sponsor</h3>
+            <div class="price">$7,500</div>
+            <div class="avail" style="color:var(--bunker)">2 Available</div>
+            <ul>
+              <li>One sponsored hole, your product as the signature drink</li>
+              <li>The hole's mini-game named after your brand</li>
+              <li>Scorecard hole line plus back-of-card logo</li>
+              <li>On-premise activation at your hole</li>
+              <li>6 complimentary team tickets</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tier">
+          <div class="accent" style="background:var(--fairway)"></div>
+          <div class="inner">
+            <h3>Hole Sponsor</h3>
+            <div class="price">$5,000</div>
+            <div class="avail" style="color:var(--fairway)">2 Available</div>
+            <ul>
+              <li>One sponsored hole, your product as the signature drink</li>
+              <li>Hole banner on premise</li>
+              <li>Scorecard hole line, in hand for 5+ hours</li>
+              <li>4 complimentary team tickets</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <p class="tier-rule">One category per partner, confirmed against the Title Partner's brand portfolio at signing. <b>Title Partnership ($15,000, one available) is offered by private conversation.</b></p>
+    </div>
+  </section>
+
+  <!-- 08 SCORECARD VIEW -->
+  <section class="on-sand">
+    <div class="wrap">
+      <div class="sec-head" style="text-align:center">
+        <span class="kicker">08 · Scorecard Features</span>
+        <h2>The Scorecard,<br><span class="red">Sponsor's View.</span></h2>
+      </div>
+      <p class="bodycopy" style="max-width:680px;margin:0 auto;text-align:center">Every attendee carries a physical and digital scorecard for the full five hours. It is the single most-handled object at the event: checked at every hole, photographed for the leaderboard, kept as the souvenir.</p>
+      <div class="cards2">
+        <figure>
+          <img src="scorecard-front.png" alt="Scorecard front, nine sponsor lines">
+          <figcaption>FRONT · nine sponsor lines, one per hole</figcaption>
+        </figure>
+        <figure>
+          <img src="scorecard-back.png" alt="Scorecard back, Title Partner placement">
+          <figcaption>BACK · the Title Partner's real estate</figcaption>
+        </figure>
+      </div>
+      <p class="inv-line">Nine hole lines. One back panel. That's the inventory.</p>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="on-sand" style="background:var(--sand-deep)">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">08 · Why The Giving Green</span>
+        <h2>Your Brand Isn't Just on a Banner.<br><span class="red">It Becomes Part of the Event.</span></h2>
+      </div>
+      <div class="whygrid">
+        <div class="why"><h3>Built Into the Game</h3><p>Attendees lower their score by ordering the hole's official drink. Your product isn't sitting on a sampling table waiting to be noticed. It gives them a reason to order it.</p></div>
+        <div class="why"><h3>Five Hours in Their Hands</h3><p>The scorecard stays with every attendee throughout the event, keeping your brand in front of them from the first hole to the final score.</p></div>
+        <div class="why"><h3>Year One Proved It</h3><p>Every sponsored beverage sold through in Year One. We're not guessing whether the concept works. We've already seen it work.</p></div>
+        <div class="why"><h3>Real Money for Local Charities</h3><p>Nine local charities. Every ticket supports the charity selected at checkout, and turnout determines how the money is divided.</p></div>
+      </div>
+      <div class="redband"><span>Help Us Raise More. We'll Help You Sell More.</span></div>
+    </div>
+  </section>
+
+  <!-- CLOSE -->
+  <section class="close on-ink">
+    <div class="close-bg duo"></div>
+    <span class="kicker">·· Sponsorship · 2026 ··</span>
+    <h2>Let's Build Your Hole.</h2>
+    <span class="sub">Party Fore a Great Cause.</span>
+    <div class="hero-cta">
+      <a class="pill" href="mailto:ozzie@thegivinggreen.org">ozzie@thegivinggreen.org</a>
+      <a class="ghost" href="TGG_2026_Sponsorship_Deck.pdf" download>Download the Deck</a>
+    </div>
+    <p class="contact">Ozzie Salcedo, Co-Founder &amp; Marketing Director · <a href="tel:+16465332144">646-533-2144</a> · thegivinggreen.org<br>Saturday, October 3, 2026 · 1 to 6 PM · Soulard</p>
+  </section>
+
+</div>
+
+<footer>
+  <div class="ft-title">The Giving Green 2&#10084;26</div>
+  <span class="sub">Party Fore a Great Cause.</span>
+</footer>
+
+<script>
+(function(){
+  var HASH = "d19761621b47b274feabd3e539dda7a75f2b9041f455536a73e6a0fce00fbbe0";
+  var gate = document.getElementById("gate"),
+      deck = document.getElementById("deck"),
+      pw = document.getElementById("pw"),
+      go = document.getElementById("go"),
+      err = document.getElementById("err");
+
+  function unlock(){
+    gate.style.display = "none";
+    deck.style.display = "block";
+    window.scrollTo(0, 0);
+    try { sessionStorage.setItem("tgg_sponsor_ok", "1"); } catch(e){}
+  }
+
+  function sha256(str){
+    var data = new TextEncoder().encode(str);
+    return crypto.subtle.digest("SHA-256", data).then(function(buf){
+      return Array.prototype.map.call(new Uint8Array(buf), function(b){
+        return b.toString(16).padStart(2, "0");
+      }).join("");
+    });
+  }
+
+  function attempt(){
+    var val = (pw.value || "").trim().toUpperCase();
+    if(!val) return;
+    sha256(val).then(function(h){
+      if(h === HASH){ unlock(); }
+      else {
+        err.classList.add("show");
+        pw.classList.add("shake");
+        setTimeout(function(){ pw.classList.remove("shake"); }, 400);
+        pw.select();
+      }
+    });
+  }
+
+  go.addEventListener("click", attempt);
+  pw.addEventListener("keydown", function(e){ if(e.key === "Enter") attempt(); });
+
+  try { if(sessionStorage.getItem("tgg_sponsor_ok") === "1") unlock(); } catch(e){}
+})();
+</script>
+</body>
+</html>
