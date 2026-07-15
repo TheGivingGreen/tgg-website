@@ -63,7 +63,8 @@ section{padding:84px 0}
 
 /* hero */
 .hero{position:relative;text-align:center;padding:110px 20px 96px;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:url('hero.webp') center/cover;opacity:.16}
+.hero-bg{position:absolute;inset:0;background:url('hero.webp') center/cover;opacity:.42}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,40,34,.55),rgba(20,40,34,.75))}
 .hero > *{position:relative}
 .hero h1{font-size:clamp(2.7rem,7.6vw,5.2rem);margin-top:18px;line-height:.92}
 .hero .sub{display:block;font-size:1.25rem;margin-top:16px}
@@ -156,7 +157,8 @@ section{padding:84px 0}
 
 /* close */
 .close{text-align:center;position:relative;overflow:hidden;padding:110px 20px}
-.close-bg{position:absolute;inset:0;background:url('strip1.webp') center/cover;opacity:.14}
+.close-bg{position:absolute;inset:0;background:url('strip1.webp') center/cover;opacity:.38}
+.close-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,40,34,.6),rgba(20,40,34,.78))}
 .close > *{position:relative}
 .close h2{font-size:clamp(2.4rem,7vw,4.4rem)}
 .close .sub{display:block;margin-top:14px;font-size:1.15rem}
