@@ -104,11 +104,11 @@ nav.scrolled .hamb span{background:var(--forest)}
 /* BANDS */
 .band{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;background:var(--sand);border-top:1px solid var(--line)}
 .band.dark{background:var(--forest);border-top:1px solid rgba(245,240,232,.14)}
-.band .art{display:flex;align-items:center;justify-content:center;padding:clamp(36px,5vw,76px);background:var(--sand-deep)}
+.band .art{display:flex;align-items:center;justify-content:center;padding:clamp(16px,2.5vw,32px);background:var(--sand-deep)}
 .band.dark .art{background:#16302a}
 .band .copy{padding:clamp(36px,5vw,76px);display:flex;flex-direction:column;gap:14px;justify-content:center}
 .band.rev .art{order:2} .band.rev .copy{order:1}
-.band .art .hatwrap{width:74%;max-width:330px}
+.band .art .hatwrap{width:92%;max-width:560px}
 .copy .bignum{font-size:clamp(40px,5vw,64px);line-height:.9;color:rgba(30,58,50,.16)}
 .band.dark .copy .bignum{color:rgba(173,163,102,.42)}
 .copy .sub{color:var(--fairway)}
@@ -146,7 +146,7 @@ footer .small{font-size:13px;color:rgba(255,252,245,.55);margin-top:18px}
   .phero-art .hatwrap{width:62%;max-width:280px}
   .band,.band.rev{grid-template-columns:1fr}
   .band .art,.band.rev .art{order:0} .band .copy,.band.rev .copy{order:0}
-  .band .art .hatwrap{width:60%;max-width:260px}
+  .band .art .hatwrap{width:80%;max-width:380px}
 }
 </style>
 </head>
@@ -173,26 +173,26 @@ footer .small{font-size:13px;color:rgba(255,252,245,.55);margin-top:18px}
     <span class="name">The Giving Green</span>
   </a>
   <div class="links">
-    <a class="lnk" href="index.html">The Crawl</a>
-    <a class="lnk" href="index.html">Charities</a>
-    <span class="soonlink">Year One <span class="soon">Soon</span></span>
+    <a class="lnk" href="index.html#course">The Crawl</a>
+    <a class="lnk" href="index.html#good">Charities</a>
+    <a class="lnk" href="index.html#proof">Year One</a>
     <a class="lnk active" href="pro-shop.html" aria-current="page">Pro Shop</a>
-    <span class="soonlink">Sponsor Us <span class="soon">Soon</span></span>
-    <a class="lnk" href="index.html">FAQ</a>
-    <a class="btn ghost" href="index.html">Get Tickets</a>
+    <a class="lnk" href="sponsor.html">Sponsor Us</a>
+    <a class="lnk" href="index.html#faq">FAQ</a>
+    <a class="btn ghost" href="index.html#tickets">Get Tickets</a>
   </div>
   <button class="hamb" id="hamb" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
 </nav>
 
 <div class="mobnav" id="mobnav" aria-hidden="true">
   <button class="close" id="mobclose" aria-label="Close menu"></button>
-  <a href="index.html">The Crawl</a>
-  <a href="index.html">Charities</a>
-  <div class="soonrow"><a href="#" onclick="return false">Year One</a><span class="soon">Soon</span></div>
+  <a href="index.html#course">The Crawl</a>
+  <a href="index.html#good">Charities</a>
+  <a href="index.html#proof">Year One</a>
   <a href="pro-shop.html">Pro Shop</a>
-  <div class="soonrow"><a href="#" onclick="return false">Sponsor Us</a><span class="soon">Soon</span></div>
-  <a href="index.html">FAQ</a>
-  <a class="ticket" href="index.html">Get Tickets</a>
+  <a href="sponsor.html">Sponsor Us</a>
+  <a href="index.html#faq">FAQ</a>
+  <a class="ticket" href="index.html#tickets">Get Tickets</a>
 </div>
 
 <header class="phero">
