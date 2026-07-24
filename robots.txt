@@ -1,0 +1,7 @@
+# The Giving Green · thegivinggreen.org
+# All crawlers welcome, including AI crawlers (GPTBot, ClaudeBot, PerplexityBot, Google-Extended).
+
+User-agent: *
+Allow: /
+
+Sitemap: https://thegivinggreen.org/sitemap.xml
