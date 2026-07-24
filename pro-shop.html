@@ -22,6 +22,9 @@ body{background:var(--sand);color:var(--forest);font-family:'DM Sans',system-ui,
 .serif{font-family:'Playfair Display',Georgia,serif}
 .label{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
 .ggsymbol{position:absolute;width:0;height:0;overflow:hidden}
+.zero{display:inline-block;vertical-align:baseline;margin:0 .015em}
+.phero h1 .zero svg{height:1.0em;width:auto;display:inline-block;vertical-align:baseline;transform:translateY(.037em)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;width:100%;background:transparent;z-index:50;
@@ -75,15 +78,17 @@ nav.scrolled .hamb span{background:var(--forest)}
 .mobnav .close::before{transform:rotate(45deg)} .mobnav .close::after{transform:rotate(-45deg)}
 
 /* HERO */
-.phero{background:var(--forest);color:var(--cream);display:grid;grid-template-columns:1.12fr .88fr;
-  align-items:center;min-height:92vh;min-height:92dvh}
-.phero-copy{padding:clamp(110px,16vh,170px) clamp(24px,4vw,64px) clamp(48px,8vh,90px)}
+.phero{background:var(--forest);color:var(--cream);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;min-height:92vh;min-height:92dvh}
+.phero-copy{padding:clamp(110px,16vh,170px) clamp(24px,4vw,64px) clamp(48px,8vh,90px);
+  max-width:1400px;width:100%}
 .phero .kicker{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--bunker);margin-bottom:18px}
-.phero h1{font-family:'Anton',sans-serif;text-transform:uppercase;line-height:.94;letter-spacing:.01em;font-size:clamp(52px,13vw,184px)}
-.phero p{max-width:46ch;margin:24px 0 0;font-size:clamp(15px,1.7vw,17px);line-height:1.65;color:rgba(255,252,245,.86)}
-.phero-art{align-self:stretch;background:#16302a;display:flex;align-items:center;justify-content:center;
-  padding:clamp(40px,6vw,80px);border-left:1px solid rgba(245,240,232,.14)}
-.phero-art .hatwrap{width:78%;max-width:330px}
+.phero h1{font-family:'Anton',sans-serif;text-transform:uppercase;line-height:.94;letter-spacing:.01em;font-size:clamp(52px,14vw,196px)}
+.phero .subline{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.02em;
+  font-size:clamp(14px,2.7vw,40px);margin-top:22px;color:var(--bunker);font-weight:400;line-height:1.15;
+  white-space:nowrap}
+@media(max-width:640px){.phero .subline{white-space:normal;font-size:clamp(13px,3.4vw,20px)}}
+.phero p{max-width:46ch;margin:24px auto 0;font-size:clamp(15px,1.7vw,17px);line-height:1.65;color:rgba(255,252,245,.86)}
 .hatwrap{position:relative;width:100%;line-height:0}
 .hatwrap .hat{width:100%;height:auto;display:block}
 .hatwrap .emb{position:absolute;left:50%;top:51%;transform:translate(-50%,-50%);width:27%;height:auto}
@@ -193,16 +198,8 @@ footer .small{font-size:13px;color:rgba(255,252,245,.55);margin-top:18px}
 <header class="phero">
   <div class="phero-copy">
     <div class="kicker" style="font-size: 20px">The Pro Shop &middot; Headwear &middot; Limited</div>
-    <h1>THE 2026<br>MAIN EVENT<br>HAT COLLECTION</h1>
-    <p style="font-size:15px;color:var(--bunker);margin-top:12px;font-weight:500;">Limited edition · Event exclusive · October 3, Soulard</p>
-  </div>
-  <div class="phero-art">
-    <div class="hatwrap"><svg class="hat" viewBox="0 0 240 175" xmlns="http://www.w3.org/2000/svg">
-  <path class="h-brim" d="M 38 122 Q 120 168 204 122 Q 162 134 120 135 Q 78 134 38 122 Z" fill="#E04444" stroke="#1E3A32" stroke-width="3.5" stroke-linejoin="round"/>
-  <path class="h-crown" d="M 54 122 C 54 56 84 42 120 42 C 156 42 186 56 186 122 Z" fill="#FC5656" stroke="#1E3A32" stroke-width="3.5" stroke-linejoin="round"/>
-  <path class="h-seam" d="M120 42 L120 122 M94 46 C86 74 84 98 84 122 M146 46 C156 74 156 98 156 122" fill="none" stroke="#1E3A32" stroke-width="2" opacity="0.5"/>
-  <circle class="h-crown" cx="120" cy="44" r="5" fill="#FC5656" stroke="#1E3A32" stroke-width="3"/>
-</svg><svg class="emb" viewBox="0 0 200 200" aria-hidden="true"><use href="#ggmark"/></svg></div>
+    <h1 class="anton">THE 2<span class="zero" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="2550 3090 4350 4620" aria-hidden="true"><g><g><g style="fill:rgb(50,78,53);fill-opacity:1;stroke:none;" transform="matrix(17.03888 0 0 17.03888 4724.999961 5399.999959) matrix(1 0 0 1 0 0) translate(-125.081989,-132.899546)"><path d="M 116.50 258.40 C 107.71 251.25 98.25 244.79 81.50 234.52 C 58.76 220.58 43.41 208.42 31.35 194.80 C -4.40 154.43 -8.84 102.68 20.90 73.05 C 32.71 61.29 45.93 56.00 63.52 56.00 C 75.37 56.00 85.52 58.32 96.53 63.55 C 100.53 65.45 104.08 67.00 104.40 67.00 C 105.37 67.00 105.12 58.07 103.37 30.19 C 102.12 10.44 102.00 3.60 102.86 2.74 C 104.36 1.24 117.89 0.31 125.50 1.19 C 128.80 1.57 137.12 3.55 144.00 5.58 C 164.44 11.62 167.04 12.13 177.75 12.20 C 183.39 12.23 188.00 12.58 188.00 12.97 C 188.00 13.37 186.27 16.37 184.15 19.65 C 176.86 30.93 169.33 35.02 151.18 37.57 C 137.11 39.54 136.34 39.76 130.00 43.55 C 119.88 49.61 119.55 50.25 119.17 64.95 L 118.85 77.75 L 122.03 81.38 C 123.78 83.37 125.60 85.00 126.07 85.00 C 126.55 85.00 129.92 82.06 133.56 78.47 C 147.41 64.83 160.91 58.15 179.07 55.94 C 211.36 52.01 238.71 71.75 247.13 105.05 C 248.94 112.20 249.17 115.30 248.71 126.46 C 248.08 141.94 246.04 149.96 239.03 164.50 C 225.42 192.73 201.80 215.66 164.21 237.17 C 151.30 244.55 134.68 256.40 129.56 261.86 C 127.95 263.59 126.15 264.98 125.56 264.95 C 124.98 264.93 120.90 261.98 116.50 258.40 Z"></path></g><g style="fill:rgb(113,141,88);fill-opacity:1;stroke:none;" transform="matrix(17.03888 0 0 17.03888 4724.999961 5399.999959) matrix(1 0 0 1 -0.081552 9.36477) translate(-125.000437,-142.264315)"><path d="M 58.50 207.80 C 43.04 199.73 26.93 181.80 17.98 162.69 C 4.75 134.47 5.13 110.71 19.17 87.32 C 25.33 77.05 38.14 67.82 50.03 65.08 C 56.81 63.52 73.71 63.78 80.54 65.55 C 87.63 67.39 96.07 71.11 101.25 74.69 L 105.00 77.27 L 105.00 129.91 L 101.25 130.50 C 59.80 137.05 38.41 152.16 46.92 168.85 C 49.26 173.43 53.50 176.41 66.21 182.42 C 74.35 186.27 76.41 187.74 79.02 191.53 C 81.05 194.48 81.91 196.71 81.51 197.98 C 80.33 201.68 71.96 207.27 64.50 209.34 C 63.40 209.64 60.70 208.95 58.50 207.80 Z M 229.40 155.83 C 223.40 149.42 210.84 142.39 197.00 137.69 C 177.59 131.11 164.71 128.95 140.16 128.16 L 119.82 127.50 L 119.95 109.04 C 120.02 98.89 120.31 90.36 120.58 90.09 C 120.86 89.81 122.13 90.80 123.41 92.29 C 124.69 93.78 126.01 95.00 126.35 95.00 C 126.69 95.00 131.14 90.84 136.23 85.75 C 141.33 80.66 148.09 74.98 151.26 73.12 C 164.40 65.42 178.93 62.29 193.76 63.97 C 225.87 67.62 246.85 99.86 240.54 135.87 C 239.02 144.55 234.75 157.42 233.04 158.47 C 232.64 158.72 231.00 157.53 229.40 155.83 Z"></path></g><g style="fill:rgb(173,163,102);fill-opacity:1;stroke:none;" transform="matrix(17.03888 0 0 17.03888 4724.999961 5399.999959) matrix(1 0 0 1 15.602389 19.653562) translate(-140.684378,-152.553107)"><path d="M 122.11 252.10 C 116.69 247.04 105.91 239.43 95.00 232.96 C 80.44 224.33 69.00 216.93 69.00 216.15 C 69.00 215.79 72.24 213.95 76.19 212.05 C 80.15 210.15 85.33 206.74 87.69 204.47 C 91.60 200.73 92.00 199.90 92.00 195.53 C 92.00 191.11 91.61 190.33 87.25 186.01 C 83.72 182.52 80.57 180.60 75.00 178.57 C 63.04 174.19 55.08 170.05 53.25 167.25 C 45.70 155.74 61.08 143.94 91.50 137.91 C 97.00 136.82 102.29 135.76 103.25 135.56 C 104.84 135.22 105.00 136.28 105.00 147.05 L 105.00 158.92 L 101.02 160.11 C 92.53 162.66 92.00 167.77 99.85 171.28 C 110.10 175.86 129.92 172.61 130.83 166.19 C 131.28 163.00 129.70 161.46 124.48 159.99 L 120.00 158.74 L 120.00 133.00 L 133.39 133.00 C 157.30 133.00 174.24 135.61 192.83 142.17 C 208.47 147.69 222.20 155.85 227.74 162.93 L 230.02 165.85 L 227.81 169.67 C 224.24 175.85 214.08 189.00 207.55 195.88 C 197.89 206.06 177.35 220.69 149.83 236.97 C 144.52 240.11 135.51 246.63 128.38 252.49 L 125.27 255.05 Z M 110.61 148.25 C 110.25 137.39 110.15 111.23 110.39 90.11 C 110.73 59.49 111.09 51.56 112.16 50.88 C 114.25 49.56 115.27 49.85 114.61 51.58 C 114.27 52.45 114.00 79.00 114.00 110.58 C 114.00 158.58 113.77 168.00 112.63 168.00 C 111.53 168.00 111.12 164.01 110.61 148.25 Z"></path></g><g style="fill:rgb(252,86,86);fill-opacity:1;stroke:none;" transform="matrix(17.03888 0 0 17.03888 4724.999961 5399.999959) matrix(1 0 0 1 17.483011 -107.509545) translate(-142.565,-25.39)"><path d="M 108.00 25.39 L 108.00 4.78 L 119.25 5.21 C 129.40 5.60 131.91 6.11 144.92 10.43 C 155.87 14.07 161.48 15.37 168.24 15.86 L 177.13 16.50 L 173.12 22.10 C 166.77 30.96 162.18 33.16 146.35 34.96 C 135.17 36.23 126.20 38.65 116.50 43.00 C 112.82 44.65 109.41 46.00 108.91 46.00 C 108.39 46.00 108.00 37.05 108.00 25.39 Z"></path></g></g></g></svg></span><span class="sr">0</span>26<br>MAIN EVENT<br>HAT COLLECTION</h1>
+    <p class="subline">Limited Edition &middot; Event Exclusive &middot; October 3, Soulard</p>
   </div>
 </header>
 
@@ -213,7 +210,7 @@ footer .small{font-size:13px;color:rgba(255,252,245,.55);margin-top:18px}
 
 <section class="band">
   <div class="art reveal">
-    <div class="hatwrap"><img class="hat" src="/assets/images/hats/hat-founders-white.jpg" alt="The Founders Cap - White"/><svg class="emb" viewBox="0 0 200 200" aria-hidden="true"><use href="#ggmark"/></svg></div>
+    <div class="hatwrap"><img class="hat" src="/assets/images/hats/hat-founders-white.jpg" alt="The Founders Cap - White"/></div>
   </div>
   <div class="copy reveal">
     <span class="bignum anton">No. 01</span>
@@ -221,14 +218,14 @@ footer .small{font-size:13px;color:rgba(255,252,245,.55);margin-top:18px}
     <h2 class="name anton">The Founders Cap</h2>
     <p class="blurb serif">The one that started it all. Clean white canvas, a solid green rope, and the mark that gave The Giving Green its name. This is the anchor piece of the lineup, the cap you reach for when you want the whole story in one hat.</p>
     <span class="sub label">Performance fabric, laser-perforated sides, adjustable snap closure.</span>
-    <span class="price">$35.00</span>
+    <span class="price">$30.00</span>
     <span class="sub label">SKU TGG-HAT-FOUNDERS-WHT</span>
     <a class="btn ghost" href="#" aria-disabled="true">Pre-Order &mdash; Coming Soon</a>
   </div>
 </section>
 <section class="band dark rev">
   <div class="art reveal">
-    <div class="hatwrap"><img class="hat" src="/assets/images/hats/hat-stateside-navy.jpg" alt="The Stateside Rope Cap - Navy"/><svg class="emb" viewBox="0 0 200 200" aria-hidden="true"><use href="#ggmark"/></svg></div>
+    <div class="hatwrap"><img class="hat" src="/assets/images/hats/hat-stateside-navy.jpg" alt="The Stateside Rope Cap - Navy"/></div>
   </div>
   <div class="copy reveal">
     <span class="bignum anton">No. 02</span>
@@ -236,14 +233,14 @@ footer .small{font-size:13px;color:rgba(255,252,245,.55);margin-top:18px}
     <h2 class="name anton">The Stateside Rope Cap</h2>
     <p class="blurb serif">Great golf, better company, homegrown. Navy canvas with a red and white rope trim carries the same heart-flag mark in stars and stripes. Built for the same rounds, the same causes, just with a little more red, white, and blue in the mix.</p>
     <span class="sub label">Performance fabric, laser-perforated sides, adjustable snap closure.</span>
-    <span class="price">$35.00</span>
+    <span class="price">$30.00</span>
     <span class="sub label">SKU TGG-HAT-STATESIDE-NVY</span>
     <a class="btn ghost on-dark" href="#" aria-disabled="true">Pre-Order &mdash; Coming Soon</a>
   </div>
 </section>
 <section class="band">
   <div class="art reveal">
-    <div class="hatwrap"><img class="hat" src="/assets/images/hats/hat-missouri-green.jpg" alt="The Missouri Chapter Cap - Forest Green"/><svg class="emb" viewBox="0 0 200 200" aria-hidden="true"><path d="M55 52 L128 46 L133 60 L143 63 L147 78 L145 118 L112 121 L112 138 L126 138 L126 148 L100 148 L100 124 L57 127 Z" fill="#FFFCF5"/></svg></div>
+    <div class="hatwrap"><img class="hat" src="/assets/images/hats/hat-missouri-green.jpg" alt="The Missouri Chapter Cap - Forest Green"/></div>
   </div>
   <div class="copy reveal">
     <span class="bignum anton">No. 03</span>
@@ -251,7 +248,7 @@ footer .small{font-size:13px;color:rgba(255,252,245,.55);margin-top:18px}
     <h2 class="name anton">The Missouri Chapter Cap</h2>
     <p class="blurb serif">Where it all comes together. Forest green canvas, a gold rope, and the Show-Me State carried right on the front. The first in what we're calling our Chapter series, caps that mark the ground where this community actually plays.</p>
     <span class="sub label">Performance fabric, laser-perforated sides, adjustable snap closure.</span>
-    <span class="price">$35.00</span>
+    <span class="price">$30.00</span>
     <span class="sub label">SKU TGG-HAT-MISSOURI-GRN</span>
     <a class="btn ghost" href="#" aria-disabled="true">Pre-Order &mdash; Coming Soon</a>
   </div>
@@ -266,7 +263,7 @@ footer .small{font-size:13px;color:rgba(255,252,245,.55);margin-top:18px}
     <h2 class="name anton">The FORE Cap</h2>
     <p class="blurb serif">Simple. Structured. Ours. A clean wordmark front and center, no patch, no rope, just raised embroidery and a heart where the O should be. The most premium build in the lineup, and the one that says exactly what we're about without saying much at all.</p>
     <span class="sub label">Structured 7-panel construction, 3D puff embroidery, laser-perforated sides, adjustable snap closure.</span>
-    <span class="price">$40.00</span>
+    <span class="price">$30.00</span>
     <span class="sub label">SKU TGG-HAT-FORE-WHT</span>
     <a class="btn ghost on-dark" href="#" aria-disabled="true">Pre-Order &mdash; Coming Soon</a>
   </div>
