@@ -721,7 +721,6 @@ body.menu-open{overflow:hidden}
       <a href="#tickets"><span class="hole">09</span><span class="venue">Hammerstone's</span></a>
     </div>
     <div class="after reveal rd3">
-      <p class="after-note"><em>2026 course in final review.</em> Full lineup drops with ticket launch.</p>
       <a href="https://thegivinggreen.store" target="_blank" rel="noopener" class="btn btn-primary">Get on the Tee Sheet</a>
     </div>
   </div>
@@ -774,14 +773,14 @@ body.menu-open{overflow:hidden}
   <h2 class="section-h2 reveal rd1">Choose Your Team.</h2>
   <span class="section-serif reveal rd2">Pick which charity you want to support. $15 of every ticket goes directly to your charity of choice.</span>
   <div class="drop-count reveal rd2" id="drop-count" role="timer">
-    <p class="drop-label">Tickets Drop In</p>
+    <p class="drop-label">The Main Event Starts In</p>
     <div class="drop-units">
       <div class="u"><span class="n" id="dc-d">--</span><span class="l">Days</span></div>
       <div class="u"><span class="n" id="dc-h">--</span><span class="l">Hours</span></div>
       <div class="u"><span class="n" id="dc-m">--</span><span class="l">Minutes</span></div>
       <div class="u"><span class="n" id="dc-s">--</span><span class="l">Seconds</span></div>
     </div>
-    <p class="drop-live-msg">Tickets are live. Pick your team below.</p>
+    <p class="drop-live-msg">The Main Event is live. See you in Soulard.</p>
   </div>
   <div class="team-grid reveal rd2">
 
@@ -931,7 +930,7 @@ body.menu-open{overflow:hidden}
       <div class="faq-item"><button class="faq-q" aria-expanded="false"><span class="faq-q-text">How do I pick up my shirt?</span><span class="faq-icon">+</span></button><div class="faq-a"><p>Shirt pickup details will be sent via email in the week before the event. We will have a designated pickup location in Soulard. You must wear your shirt to access venues on event day.</p></div></div>
       <div class="faq-item"><button class="faq-q" aria-expanded="false"><span class="faq-q-text">How does scoring work?</span><span class="faq-icon">+</span></button><div class="faq-a"><p>Each hole has a featured sponsored drink and a mini-game or challenge. Order the featured drink and earn -2 strokes. Order any other drink and earn -1. Play the mini-game for -1. Skip a bar entirely and take +2. Carry your scorecard all day across all nine holes.</p></div></div>
       <div class="faq-item"><button class="faq-q" aria-expanded="false"><span class="faq-q-text">How do the charities benefit?</span><span class="faq-icon">+</span></button><div class="faq-a"><p>$15 of your $45 ticket goes directly to your chosen charity. The team shirt you select at checkout is how you choose which one.</p></div></div>
-      <div class="faq-item"><button class="faq-q" aria-expanded="false"><span class="faq-q-text">Where exactly is the event?</span><span class="faq-icon">+</span></button><div class="faq-a"><p>The event takes place across nine bars in Soulard, St. Louis. All bars are walkable within the neighborhood. The full course map drops with the ticket launch.</p></div></div>
+      <div class="faq-item"><button class="faq-q" aria-expanded="false"><span class="faq-q-text">Where exactly is the event?</span><span class="faq-icon">+</span></button><div class="faq-a"><p>The event takes place across nine bars in Soulard, St. Louis. All bars are walkable within the neighborhood. The full course is listed above, and we will send the course map by email before the event.</p></div></div>
       <div class="faq-item"><button class="faq-q" aria-expanded="false"><span class="faq-q-text">Do I need to know anything about golf?</span><span class="faq-icon">+</span></button><div class="faq-a"><p>Not even a little bit. In Year One we had everyone from actual golfers to people who have never picked up a club having the same amount of fun. If you can carry a scorecard and order a drink you are qualified to play.</p></div></div>
       <div class="faq-item"><button class="faq-q" aria-expanded="false"><span class="faq-q-text">Is there an age requirement?</span><span class="faq-icon">+</span></button><div class="faq-a"><p>Yes. You must be 21 or older to attend. Valid ID is required at all venues. No exceptions.</p></div></div>
       <div class="faq-item"><button class="faq-q" aria-expanded="false"><span class="faq-q-text">Can I bring a group?</span><span class="faq-icon">+</span></button><div class="faq-a"><p>Absolutely. Each person in your group buys their own ticket and picks their team color. Email us at <a href="mailto:admin@thegivinggreen.org">admin@thegivinggreen.org</a> if you have a group of 10 or more.</p></div></div>
@@ -1033,9 +1032,9 @@ document.getElementById('notify-form').addEventListener('submit',function(e){
     .finally(function(){btn.disabled=false;});
 });
 
-// Ticket drop countdown
-// Drop confirmed: July 24, 2026, 12:00 PM Central
-const DROP_AT = new Date('2026-07-24T12:00:00-05:00');
+// Main Event countdown
+// Event start: October 3, 2026, 1:00 PM Central
+const EVENT_AT = new Date('2026-10-03T13:00:00-05:00');
 (function(){
   const box=document.getElementById('drop-count');
   if(!box)return;
@@ -1043,7 +1042,7 @@ const DROP_AT = new Date('2026-07-24T12:00:00-05:00');
   const pad=n=>String(n).padStart(2,'0');
   let t;
   function tick(){
-    const diff=DROP_AT-Date.now();
+    const diff=EVENT_AT-Date.now();
     if(diff<=0){box.classList.add('drop-live');if(t)clearInterval(t);return;}
     d.textContent=pad(Math.floor(diff/864e5));
     h.textContent=pad(Math.floor(diff/36e5)%24);
