@@ -426,12 +426,13 @@ footer{background:var(--shadow-ink);color:var(--cream);padding:clamp(44px,7vh,72
 /* Hero -- tighten padding, center everything */
 @media(max-width:768px){
   .hero-content{padding:100px 20px 0;text-align:center;align-items:center}
-  .hero .eyebrow{justify-content:center}
+  .hero .eyebrow{justify-content:center;font-size:14px}
   .hero .eyebrow::before{display:none}
-  .hero h1{font-size:clamp(34px,12vw,100px);white-space:normal}
-  .hero-stamp{font-size:12px;padding:9px 14px;flex-wrap:wrap;justify-content:center;gap:4px}
+  .hero h1{font-size:clamp(38px,13.6vw,100px);line-height:.94;white-space:normal}
+  .hero-stamp{font-size:13px;padding:10px 16px;flex-wrap:wrap;justify-content:center;gap:4px}
   .hero-stamp .dot{display:none}
-  .hero .sub{font-size:15px;max-width:100%}
+  .hero .sub{font-size:17px;max-width:100%}
+  .hero .grace{font-size:22px}
   .hero-ctas{justify-content:center}
   .hero-data{grid-template-columns:repeat(2,1fr)}
 }
