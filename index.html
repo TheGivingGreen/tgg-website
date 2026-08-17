@@ -1278,11 +1278,9 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
 .gg5-form button:active{filter:brightness(.9)}     /* NEVER transform. see v6 postmortem. */
 .gg5-form button:disabled{opacity:.55}
 .gg5-err{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--flag);margin-top:8px}
-.gg5-fine{font-family:'DM Sans',sans-serif;font-size:10.5px;color:rgba(255,252,245,.32);
-  letter-spacing:.04em;margin-top:11px}
 
 .gg5-won .gg5-ask{display:none}
-.gg5-win{display:none}
+.gg5-win{display:none;text-align:center}      /* centers the Meet the Charities sub-CTA */
 .gg5-won .gg5-win{display:block}
 .gg5-code{border:1px dashed rgba(255,252,245,.42);background:rgba(255,252,245,.07);padding:14px;
   cursor:pointer;margin-bottom:13px;border-radius:12px;transition:background .2s;text-align:center;
@@ -1371,20 +1369,19 @@ html.gg5-lock,body.gg5-lock{overflow:hidden!important}
   var body = ''
     + '<div class="gg5-bar"></div><div class="gg5-pad">'
     + '<button class="gg5-x" type="button" aria-label="Close">&#10005;</button>'
-    + '<div class="gg5-exp"><span class="gg5-blip"></span>Offer expires in <span class="gg5-t">20:00</span></div>'
+    + '<div class="gg5-exp"><span class="gg5-blip"></span><span class="gg5-lbl">Offer expires in</span><span class="gg5-t">20:00</span></div>'
     + '<div class="gg5-ask">'
-      + '<div class="gg5-kicker">$5 off your ticket</div>'
-      + '<div class="gg5-line">Get on the card.</div>'
-      + '<p class="gg5-sub">Your code, plus hole reveals and team cutoffs before October 3.</p>'
+      + '<div class="gg5-kicker">Limited offer: $5 off your crawl ticket</div>'
+      + '<div class="gg5-line">Get on the tee sheet</div>'
+      + '<p class="gg5-sub">Sign up for email updates and get $5 off every ticket in your order!</p>'
       + '<div class="gg5-form">'
         + '<input type="email" class="gg5-in" placeholder="your@email.com" autocomplete="email" inputmode="email" aria-label="Email address">'
         + '<button type="button" class="gg5-go">Get Code</button>'
       + '</div>'
       + '<div class="gg5-err" role="alert"></div>'
-      + '<p class="gg5-fine">No spam. Just what matters before October 3.</p>'
     + '</div>'
     + '<div class="gg5-win">'
-      + '<div class="gg5-kicker">You are on the card</div>'
+      + '<div class="gg5-kicker">Get ready to tee off!</div>'
       + '<div class="gg5-code" role="button" tabindex="0"><b>'+CFG.code+'</b><span class="gg5-cl">Tap to copy</span></div>'
       + '<a class="gg5-buy" href="'+buyHref+'">Buy Tickets</a>'
       + '<a class="gg5-char" href="'+CFG.charities+'">Meet the Charities</a>'
@@ -1484,14 +1481,22 @@ html.gg5-lock,body.gg5-lock{overflow:hidden!important}
     setTimeout(go, 14000);
   } else { go(); }
 
-  /* countdown */
+  /* countdown. at zero the chip stops counting and reads "Offer expires on exit."
+     the clock spans are emptied and hidden so the flex gap does not leave a hole.
+     this only touches text nodes, never the modal/pill state machine. */
+  var expLbl = modal.querySelector('.gg5-lbl'),
+      expT   = modal.querySelector('.gg5-t'),
+      pillT  = pill.querySelector('.gg5-pt');
   (function tick(){
     var left = Math.max(0, TOTAL - (Date.now() - t0));
     var s = Math.floor(left/1000);
-    var txt = left <= 0 ? 'Last call'
-      : String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
-    modal.querySelector('.gg5-t').textContent = txt;
-    pill.querySelector('.gg5-pt').textContent = txt;
+    var over = left <= 0;
+    var txt = String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+    expLbl.textContent = over ? 'Offer expires on exit.' : 'Offer expires in';
+    expT.textContent = over ? '' : txt;
+    expT.style.display = over ? 'none' : '';
+    pillT.textContent = over ? '' : txt;
+    pillT.style.display = over ? 'none' : '';
     modal.querySelector('.gg5-bar').style.transform = 'scaleX(' + (left/TOTAL) + ')';
     if(left > 0) setTimeout(tick, 1000);
   })();
