@@ -1220,40 +1220,49 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     <text x="600" y="640" text-anchor="middle" font-family="Anton, sans-serif" font-size="76" fill="#FFFCF5" letter-spacing="2">SOULARD 2026</text>
   </svg>
 </template>
-<!-- ============ TGG $5 OFF CAPTURE · v5 ============
-     Flow:  splash (untouched)  ->  homepage  ->  3s  ->  offer card
-            X out               ->  glowing red pill, lifted clear of the iOS swipe zone
+<!-- ============ TGG $5 OFF CAPTURE · v6 ============
+     splash (untouched) -> homepage -> 3s -> offer card -> X -> glowing pill
+     No visibility timers anywhere. CSS owns every transition, so the
+     open/close state cannot race with itself.
      ================================================================ -->
 <style>
-/* ── COLLAPSED: the glowing red pill ──────────────────────── */
-.gg5-pill{position:fixed;z-index:118;right:26px;bottom:26px;display:flex;align-items:center;gap:9px;
+/* ── shared: both live in the DOM permanently, CSS decides what shows ── */
+.gg5-pill,.gg5-card{
+  position:fixed;z-index:118;
+  visibility:hidden;pointer-events:none;
+  will-change:transform;
+  /* visibility flips instantly on the way in, and only after the slide on the way out.
+     that delayed-visibility trick is what removes every setTimeout. */
+  transition:transform .5s cubic-bezier(.2,.8,.25,1), visibility 0s linear .5s;
+}
+.gg5-pill.on,.gg5-card.on{visibility:visible;pointer-events:auto;
+  transition:transform .5s cubic-bezier(.2,.8,.25,1), visibility 0s linear 0s}
+
+/* ── COLLAPSED: glowing red pill ──────────────────────────── */
+.gg5-pill{right:26px;bottom:26px;display:flex;align-items:center;gap:9px;
   background:var(--flag);color:var(--cream);border:0;border-radius:999px;padding:14px 21px;cursor:pointer;
   font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;letter-spacing:.09em;
   text-transform:uppercase;-webkit-tap-highlight-color:transparent;
-  transform:translateY(260%);transition:transform .55s cubic-bezier(.2,.8,.25,1),background .2s;
-  animation:gg5glow 2.6s ease-in-out infinite}
-.gg5-pill.on{transform:none}
+  transform:translateY(260%);box-shadow:0 6px 22px rgba(252,86,86,.38)}
+.gg5-pill.on{transform:none;animation:gg5glow 2.6s ease-in-out infinite}
 .gg5-pill:hover{background:var(--flag-deep)}
-.gg5-pill[hidden]{display:none}
+.gg5-pill:active{transform:scale(.97)}
 @keyframes gg5glow{
   0%,100%{box-shadow:0 6px 22px rgba(252,86,86,.38), 0 0 0 0 rgba(252,86,86,.42)}
   50%    {box-shadow:0 6px 30px rgba(252,86,86,.62), 0 0 0 11px rgba(252,86,86,0)}
 }
 .gg5-pt{font-variant-numeric:tabular-nums;opacity:.85;font-size:11.5px}
-.gg5-blip{width:6px;height:6px;border-radius:50%;background:var(--cream);
-  animation:gg5blip 1.7s ease-in-out infinite}
+.gg5-blip{width:6px;height:6px;border-radius:50%;background:var(--cream);flex:none}
+.gg5-pill.on .gg5-blip,.gg5-card.on .gg5-blip{animation:gg5blip 1.7s ease-in-out infinite}
 @keyframes gg5blip{0%,100%{opacity:1}50%{opacity:.25}}
 
 /* ── EXPANDED: floating card ──────────────────────────────── */
-.gg5-card{position:fixed;z-index:119;right:26px;bottom:26px;width:344px;
+.gg5-card{z-index:119;right:26px;bottom:26px;width:344px;transform:translateY(260%);
   background:var(--forest);border:1px solid rgba(255,252,245,.16);border-radius:16px;
-  box-shadow:0 22px 60px rgba(20,40,34,.55);overflow:hidden;
-  transform:translateY(260%);transition:transform .55s cubic-bezier(.2,.8,.25,1)}
-.gg5-card.on{transform:none}
-.gg5-card[hidden]{display:none}
+  box-shadow:0 22px 60px rgba(20,40,34,.55);overflow:hidden}
 .gg5-bar{height:3px;background:var(--flag);transform-origin:left;transition:transform 1s linear}
 .gg5-pad{padding:16px 18px 18px;position:relative}
-.gg5-x{position:absolute;top:7px;right:7px;width:32px;height:32px;border:0;background:transparent;
+.gg5-x{position:absolute;top:7px;right:7px;width:34px;height:34px;border:0;background:transparent;
   color:rgba(255,252,245,.45);font-size:16px;line-height:1;cursor:pointer;border-radius:50%;z-index:3;
   -webkit-tap-highlight-color:transparent}
 .gg5-x:hover{color:var(--cream);background:rgba(255,252,245,.1)}
@@ -1264,7 +1273,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   text-transform:uppercase;color:var(--flag)}
 .gg5-exp .gg5-blip{background:var(--flag)}
 .gg5-t{font-variant-numeric:tabular-nums;letter-spacing:.04em}
-
 .gg5-kicker{font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.19em;
   text-transform:uppercase;color:var(--bunker);margin-bottom:6px}
 .gg5-line{font-family:'Anton',sans-serif;font-size:20px;text-transform:uppercase;color:var(--cream);
@@ -1274,20 +1282,19 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
 .gg5-form{display:flex;border:2px solid rgba(255,252,245,.3);background:rgba(255,252,245,.07);
   border-radius:999px;overflow:hidden;padding:4px 4px 4px 16px}
 .gg5-form input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--cream);
-  font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500}   /* 16px stops iOS zoom-on-focus */
+  font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500}  /* 16px stops iOS zoom-on-focus */
 .gg5-form input::placeholder{color:rgba(255,252,245,.38)}
 .gg5-form button{flex:none;background:var(--flag);color:var(--cream);border:0;border-radius:999px;
   padding:11px 17px;font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.09em;
   text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background .2s}
 .gg5-form button:hover{background:var(--flag-deep)}
 .gg5-form button:disabled{opacity:.55}
-.gg5-err{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--flag);margin-top:7px;min-height:0}
+.gg5-err{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--flag);margin-top:7px}
 .gg5-fine{font-family:'DM Sans',sans-serif;font-size:10.5px;color:rgba(255,252,245,.3);
   letter-spacing:.04em;margin-top:9px}
-
 .gg5-won .gg5-ask{display:none}
 .gg5-win{display:none}
-.gg5-won .gg5-win{display:block;animation:wordmarkIn .45s ease forwards}
+.gg5-won .gg5-win{display:block}
 .gg5-code{border:1px dashed rgba(255,252,245,.42);background:rgba(255,252,245,.07);padding:12px;
   cursor:pointer;margin-bottom:11px;border-radius:10px;transition:background .2s;text-align:center}
 .gg5-code:hover{background:rgba(255,252,245,.14)}
@@ -1306,22 +1313,23 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
 
 body.gg5-live #float-cta{display:none!important}
 
-/* ── MOBILE ───────────────────────────────────────────────── */
-/* Lifted well clear of the iOS home-indicator swipe zone.
-   Anything within ~40px of the bottom edge gets stolen by the system gesture. */
+/* ── MOBILE ── lifted clear of the iOS home-indicator gesture zone ── */
 @media(max-width:600px){
-  .gg5-pill{right:auto;left:50%;bottom:96px;transform:translate(-50%,300%);padding:14px 22px;font-size:12.5px}
+  .gg5-pill{right:auto;left:50%;bottom:96px;transform:translate(-50%,300%);padding:14px 22px}
   .gg5-pill.on{transform:translate(-50%,0)}
-  .gg5-card{left:12px;right:12px;bottom:84px;width:auto;border-radius:18px}
+  .gg5-pill:active{transform:translate(-50%,0) scale(.97)}
+  .gg5-card{left:12px;right:12px;bottom:84px;width:auto;border-radius:18px;transform:translateY(300%)}
+  .gg5-card.on{transform:none}
   .gg5-pad{padding:15px 16px 17px}
   .gg5-line{font-size:19px}
   .gg5-sub{font-size:12px;margin-bottom:11px}
   .gg5-code b{font-size:25px}
-  .gg5-x{width:36px;height:36px}          /* bigger tap target */
+  .gg5-x{width:38px;height:38px}
 }
 @media(prefers-reduced-motion:reduce){
-  .gg5-pill,.gg5-card{transition:none;animation:none}
-  .gg5-blip{animation:none}
+  .gg5-pill,.gg5-card{transition:visibility 0s}
+  .gg5-pill.on{animation:none}
+  .gg5-blip{animation:none!important}
 }
 </style>
 
@@ -1329,18 +1337,12 @@ body.gg5-live #float-cta{display:none!important}
 (function(){
   "use strict";
 
-  /* ===================== CONFIG ===================== */
   var CFG = {
-    code:        "GIVING5",
-    store:       "https://thegivinggreen.store",
-    redirect:    "/",                  // store homepage IS the ticket grid
-    charities:   "#tickets",
-    minutes:     20,
-    delayAfterSplash: 3000,            // let them read the homepage first
-    endpoint:    "/.netlify/functions/subscribe",
-    utm:         "utm_source=thegivinggreen.org&utm_medium=offer&utm_campaign=giving5"
+    code:"GIVING5", store:"https://thegivinggreen.store", redirect:"/",
+    charities:"#tickets", minutes:20, delayAfterSplash:3000,
+    endpoint:"/.netlify/functions/subscribe",
+    utm:"utm_source=thegivinggreen.org&utm_medium=offer&utm_campaign=giving5"
   };
-  /* ================================================== */
 
   var buyHref = CFG.store + "/discount/" + encodeURIComponent(CFG.code)
               + "?redirect=" + encodeURIComponent(CFG.redirect + "?" + CFG.utm);
@@ -1352,19 +1354,17 @@ body.gg5-live #float-cta{display:none!important}
   var t0 = parseInt(ls('gg5_t0')||'0',10);
   if(!t0){ t0 = Date.now(); ls('gg5_t0', String(t0)); }
 
-  /* ---------- build ---------- */
   var pill = document.createElement('button');
-  pill.className = 'gg5-pill'; pill.hidden = true;
+  pill.className = 'gg5-pill'; pill.type = 'button';
   pill.setAttribute('aria-label','Reopen five dollars off offer');
   pill.innerHTML = '<span class="gg5-blip"></span>$5 Off <span class="gg5-pt">20:00</span>';
-  document.body.appendChild(pill);
 
   var card = document.createElement('div');
-  card.className = 'gg5-card'; card.hidden = true;
+  card.className = 'gg5-card';
   card.setAttribute('role','dialog'); card.setAttribute('aria-label','Five dollars off your ticket');
   card.innerHTML =
     '<div class="gg5-bar"></div><div class="gg5-pad">'
-    + '<button class="gg5-x" aria-label="Close">&#10005;</button>'
+    + '<button class="gg5-x" type="button" aria-label="Close">&#10005;</button>'
     + '<div class="gg5-exp"><span class="gg5-blip"></span>Offer expires in <span class="gg5-t">20:00</span></div>'
     + '<div class="gg5-ask">'
       + '<div class="gg5-kicker">$5 off your ticket</div>'
@@ -1383,88 +1383,85 @@ body.gg5-live #float-cta{display:none!important}
       + '<a class="gg5-buy" href="'+buyHref+'">Buy Tickets</a>'
       + '<a class="gg5-char" href="'+CFG.charities+'">Meet the Charities</a>'
     + '</div></div>';
+
+  document.body.appendChild(pill);
   document.body.appendChild(card);
+
+  /* ============ ONE state machine. No timers. No races. ============ */
+  var state = 'none';                        // 'none' | 'card' | 'pill'
+  function setState(next){
+    if(next === state) return;               // idempotent, rapid taps are harmless
+    state = next;
+    document.body.classList.add('gg5-live');
+    card.classList.toggle('on', next === 'card');
+    pill.classList.toggle('on', next === 'pill');
+    if(next === 'card'){
+      card.removeAttribute('aria-hidden'); pill.setAttribute('aria-hidden','true');
+    } else if(next === 'pill'){
+      pill.removeAttribute('aria-hidden'); card.setAttribute('aria-hidden','true');
+    }
+  }
+  /* ================================================================= */
 
   function won(){ ls('gg5_won','1'); card.classList.add('gg5-won'); }
   if(ls('gg5_won') === '1') won();
 
-  /* ---------- open / close ---------- */
-  function openCard(){
-    document.body.classList.add('gg5-live');
-    pill.classList.remove('on'); setTimeout(function(){ pill.hidden = true; }, 400);
-    card.hidden = false;
-    requestAnimationFrame(function(){ card.classList.add('on'); });
-  }
-  function showPill(){
-    document.body.classList.add('gg5-live');
-    card.classList.remove('on'); setTimeout(function(){ card.hidden = true; }, 440);
-    pill.hidden = false;
-    requestAnimationFrame(function(){ pill.classList.add('on'); });
-  }
-  pill.addEventListener('click', openCard);
-  card.querySelector('.gg5-x').addEventListener('click', showPill);
-  card.querySelector('.gg5-char').addEventListener('click', showPill);
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !card.hidden) showPill(); });
+  pill.addEventListener('click', function(){ setState('card'); });
+  card.querySelector('.gg5-x').addEventListener('click', function(){ setState('pill'); });
+  card.querySelector('.gg5-char').addEventListener('click', function(){ setState('pill'); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && state === 'card') setState('pill'); });
 
-  /* ---------- timing: splash, then homepage, then offer ---------- */
+  /* splash -> homepage -> offer */
   function armOffer(){
-    /* already converted, or already offered this session -> pill only */
-    if(ls('gg5_won')==='1' || ss('gg5_shown')==='1'){ showPill(); return; }
-    ss('gg5_shown','1');
-    openCard();
+    if(ls('gg5_won') === '1' || ss('gg5_shown') === '1'){ setState('pill'); return; }
+    ss('gg5_shown','1'); setState('card');
   }
-
-  var putt = document.getElementById('putt');
+  var putt = document.getElementById('putt'), fired = false;
+  function go(){ if(fired) return; fired = true; setTimeout(armOffer, CFG.delayAfterSplash); }
   if(putt && getComputedStyle(putt).display !== 'none'){
-    /* splash is untouched. wait for it to finish, then let the homepage breathe. */
-    var fired = false;
-    var go = function(){ if(fired) return; fired = true; setTimeout(armOffer, CFG.delayAfterSplash); };
     new MutationObserver(function(){ if(putt.classList.contains('away')) go(); })
       .observe(putt, {attributes:true, attributeFilter:['class']});
-    setTimeout(go, 14000);                       // hard fallback
-  } else {
-    setTimeout(armOffer, CFG.delayAfterSplash);
-  }
+    setTimeout(go, 14000);                   // fallback if the splash never signals
+  } else { go(); }
 
-  /* ---------- countdown ---------- */
+  /* countdown */
   (function tick(){
     var left = Math.max(0, TOTAL - (Date.now() - t0));
     var s = Math.floor(left/1000);
     var txt = left <= 0 ? 'Last call'
       : String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
-    var a = card.querySelector('.gg5-t'); if(a) a.textContent = txt;
-    var b = pill.querySelector('.gg5-pt'); if(b) b.textContent = txt;
-    var bar = card.querySelector('.gg5-bar'); if(bar) bar.style.transform = 'scaleX('+(left/TOTAL)+')';
+    card.querySelector('.gg5-t').textContent = txt;
+    pill.querySelector('.gg5-pt').textContent = txt;
+    card.querySelector('.gg5-bar').style.transform = 'scaleX(' + (left/TOTAL) + ')';
     if(left > 0) setTimeout(tick, 1000);
   })();
 
-  /* ---------- submit ---------- */
+  /* submit */
   var input = card.querySelector('.gg5-in'),
       goBtn = card.querySelector('.gg5-go'),
       err   = card.querySelector('.gg5-err');
-
+  var sending = false;
   function send(){
+    if(sending) return;
     var v = (input.value||'').trim();
     err.textContent = '';
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){
       err.textContent = 'That email does not look right.'; input.focus(); return;
     }
-    goBtn.disabled = true; goBtn.textContent = 'Sending';
-    fetch(CFG.endpoint, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ email:v, source:'org-offer-giving5' })
-    })
-    .then(function(r){ return r.json().catch(function(){ return {}; }); })
-    .then(function(d){ if(!(d && d.ok)) console.warn('[gg5] subscribe failed:', d && d.error); })
-    .catch(function(e){ console.warn('[gg5] network error:', e); })
-    .then(function(){ goBtn.disabled = false; goBtn.textContent = 'Get Code'; won(); });
+    sending = true; goBtn.disabled = true; goBtn.textContent = 'Sending';
+    fetch(CFG.endpoint, { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email:v, source:'org-offer-giving5' }) })
+      .then(function(r){ return r.json().catch(function(){ return {}; }); })
+      .then(function(d){ if(!(d && d.ok)) console.warn('[gg5] subscribe failed:', d && d.error); })
+      .catch(function(e){ console.warn('[gg5] network error:', e); })
+      .then(function(){ sending = false; goBtn.disabled = false; goBtn.textContent = 'Get Code'; won(); });
   }
   goBtn.addEventListener('click', send);
-  input.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); send(); } });
+  input.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); send(); } });
 
-  /* ---------- copy ---------- */
+  /* copy */
   var code = card.querySelector('.gg5-code');
-  code.addEventListener('click', function(){
+  function copy(){
     var lbl = code.querySelector('.gg5-cl');
     function done(){ lbl.textContent='Copied'; setTimeout(function(){ lbl.textContent='Tap to copy'; },1700); }
     if(navigator.clipboard && navigator.clipboard.writeText){
@@ -1475,8 +1472,9 @@ body.gg5-live #float-cta{display:none!important}
       try{ document.execCommand('copy'); done(); }catch(e){}
       document.body.removeChild(ta);
     }
-  });
-  code.addEventListener('keydown', function(e){ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); code.click(); } });
+  }
+  code.addEventListener('click', copy);
+  code.addEventListener('keydown', function(e){ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); copy(); } });
 
 })();
 </script>
