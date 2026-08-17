@@ -1220,114 +1220,128 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     <text x="600" y="640" text-anchor="middle" font-family="Anton, sans-serif" font-size="76" fill="#FFFCF5" letter-spacing="2">SOULARD 2026</text>
   </svg>
 </template>
-<!-- ============ TGG $5 OFF CAPTURE · v6 ============
-     splash (untouched) -> homepage -> 3s -> offer card -> X -> glowing pill
-     No visibility timers anywhere. CSS owns every transition, so the
-     open/close state cannot race with itself.
+<!-- ============ TGG $5 OFF CAPTURE · v7 ============
+     splash (untouched) -> homepage -> 3s -> BLOCKING modal
+     close  -> recesses into the glowing pill, page fully usable
+     pill   -> modal returns
+
+     Visibility is opacity + pointer-events ONLY.
+     No display toggling, no visibility toggling, no timers, and
+     nothing but the state class is allowed to touch `transform`.
      ================================================================ -->
 <style>
-/* ── shared: both live in the DOM permanently, CSS decides what shows ── */
-.gg5-pill,.gg5-card{
-  position:fixed;z-index:118;
-  visibility:hidden;pointer-events:none;
-  will-change:transform;
-  /* visibility flips instantly on the way in, and only after the slide on the way out.
-     that delayed-visibility trick is what removes every setTimeout. */
-  transition:transform .5s cubic-bezier(.2,.8,.25,1), visibility 0s linear .5s;
-}
-.gg5-pill.on,.gg5-card.on{visibility:visible;pointer-events:auto;
-  transition:transform .5s cubic-bezier(.2,.8,.25,1), visibility 0s linear 0s}
+/* ── SCRIM: blocks the page while the modal is up ─────────── */
+.gg5-scrim{position:fixed;inset:0;z-index:9000;
+  background:rgba(12,26,21,.78);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .32s ease}
+.gg5-scrim.on{opacity:1;pointer-events:auto}
 
-/* ── COLLAPSED: glowing red pill ──────────────────────────── */
-.gg5-pill{right:26px;bottom:26px;display:flex;align-items:center;gap:9px;
+/* ── MODAL ────────────────────────────────────────────────── */
+.gg5-modal{width:100%;max-width:398px;background:var(--forest);
+  border:1px solid rgba(255,252,245,.16);border-radius:18px;overflow:hidden;
+  box-shadow:0 30px 80px rgba(8,18,14,.6);
+  transform:translateY(18px) scale(.985);transition:transform .34s cubic-bezier(.2,.85,.3,1)}
+.gg5-scrim.on .gg5-modal{transform:none}
+.gg5-bar{height:3px;background:var(--flag);transform-origin:left;transition:transform 1s linear}
+.gg5-pad{padding:22px 24px 24px;position:relative}
+.gg5-x{position:absolute;top:9px;right:9px;width:38px;height:38px;border:0;background:transparent;
+  color:rgba(255,252,245,.45);font-size:17px;line-height:1;cursor:pointer;border-radius:50%;z-index:3;
+  -webkit-tap-highlight-color:transparent;transition:color .2s,background .2s}
+.gg5-x:hover{color:var(--cream);background:rgba(255,252,245,.1)}
+
+.gg5-exp{display:inline-flex;align-items:center;gap:7px;margin-bottom:13px;padding:6px 12px;
+  border-radius:999px;background:rgba(252,86,86,.15);border:1px solid rgba(252,86,86,.42);
+  font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--flag)}
+.gg5-t{font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.gg5-blip{width:6px;height:6px;border-radius:50%;background:var(--flag);flex:none}
+.gg5-scrim.on .gg5-blip,.gg5-pill.on .gg5-blip{animation:gg5blip 1.7s ease-in-out infinite}
+@keyframes gg5blip{0%,100%{opacity:1}50%{opacity:.25}}
+
+.gg5-kicker{font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.19em;
+  text-transform:uppercase;color:var(--bunker);margin-bottom:7px}
+.gg5-line{font-family:'Anton',sans-serif;font-size:26px;text-transform:uppercase;color:var(--cream);
+  line-height:1.03;margin-bottom:6px;letter-spacing:.01em}
+.gg5-sub{font-family:'DM Sans',sans-serif;font-size:13px;color:rgba(255,252,245,.62);
+  line-height:1.5;margin-bottom:15px}
+.gg5-form{display:flex;border:2px solid rgba(255,252,245,.3);background:rgba(255,252,245,.07);
+  border-radius:999px;overflow:hidden;padding:4px 4px 4px 17px}
+.gg5-form input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--cream);
+  font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500}  /* 16px stops iOS zoom-on-focus */
+.gg5-form input::placeholder{color:rgba(255,252,245,.38)}
+.gg5-form button{flex:none;background:var(--flag);color:var(--cream);border:0;border-radius:999px;
+  padding:12px 18px;font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.09em;
+  text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background .2s,filter .12s;
+  -webkit-tap-highlight-color:transparent}
+.gg5-form button:hover{background:var(--flag-deep)}
+.gg5-form button:active{filter:brightness(.9)}     /* NEVER transform. see v6 postmortem. */
+.gg5-form button:disabled{opacity:.55}
+.gg5-err{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--flag);margin-top:8px}
+.gg5-fine{font-family:'DM Sans',sans-serif;font-size:10.5px;color:rgba(255,252,245,.32);
+  letter-spacing:.04em;margin-top:11px}
+
+.gg5-won .gg5-ask{display:none}
+.gg5-win{display:none}
+.gg5-won .gg5-win{display:block}
+.gg5-code{border:1px dashed rgba(255,252,245,.42);background:rgba(255,252,245,.07);padding:14px;
+  cursor:pointer;margin-bottom:13px;border-radius:12px;transition:background .2s;text-align:center;
+  -webkit-tap-highlight-color:transparent}
+.gg5-code:hover{background:rgba(255,252,245,.14)}
+.gg5-code:active{filter:brightness(1.1)}
+.gg5-code b{display:block;font-family:'Anton',sans-serif;font-size:30px;letter-spacing:.15em;
+  color:var(--cream);line-height:1}
+.gg5-code span{display:block;font-family:'DM Sans',sans-serif;font-size:9.5px;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--bunker);margin-top:7px;font-weight:700}
+.gg5-buy{display:block;background:var(--flag);color:var(--cream);border-radius:999px;padding:15px 20px;
+  text-decoration:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;text-align:center;transition:background .2s,filter .12s;
+  -webkit-tap-highlight-color:transparent}
+.gg5-buy:hover{background:var(--flag-deep)}
+.gg5-buy:active{filter:brightness(.9)}
+.gg5-char{display:inline-block;margin-top:13px;font-family:'DM Sans',sans-serif;font-size:11px;
+  font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,252,245,.55);
+  text-decoration:none;border-bottom:1px solid rgba(255,252,245,.25);padding-bottom:2px}
+.gg5-char:hover{color:var(--cream);border-color:var(--cream)}
+
+/* ── PILL ─────────────────────────────────────────────────── */
+.gg5-pill{position:fixed;z-index:8999;right:26px;bottom:26px;display:flex;align-items:center;gap:9px;
   background:var(--flag);color:var(--cream);border:0;border-radius:999px;padding:14px 21px;cursor:pointer;
   font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;letter-spacing:.09em;
   text-transform:uppercase;-webkit-tap-highlight-color:transparent;
-  transform:translateY(260%);box-shadow:0 6px 22px rgba(252,86,86,.38)}
-.gg5-pill.on{transform:none;animation:gg5glow 2.6s ease-in-out infinite}
+  transform:translateY(240%);opacity:0;pointer-events:none;
+  box-shadow:0 6px 22px rgba(252,86,86,.38);
+  transition:transform .45s cubic-bezier(.2,.85,.3,1),opacity .28s ease,filter .12s}
+.gg5-pill.on{transform:translateY(0);opacity:1;pointer-events:auto;
+  animation:gg5glow 2.6s ease-in-out infinite}
 .gg5-pill:hover{background:var(--flag-deep)}
-.gg5-pill:active{transform:scale(.97)}
+.gg5-pill:active{filter:brightness(.9)}            /* NEVER transform */
 @keyframes gg5glow{
   0%,100%{box-shadow:0 6px 22px rgba(252,86,86,.38), 0 0 0 0 rgba(252,86,86,.42)}
   50%    {box-shadow:0 6px 30px rgba(252,86,86,.62), 0 0 0 11px rgba(252,86,86,0)}
 }
 .gg5-pt{font-variant-numeric:tabular-nums;opacity:.85;font-size:11.5px}
-.gg5-blip{width:6px;height:6px;border-radius:50%;background:var(--cream);flex:none}
-.gg5-pill.on .gg5-blip,.gg5-card.on .gg5-blip{animation:gg5blip 1.7s ease-in-out infinite}
-@keyframes gg5blip{0%,100%{opacity:1}50%{opacity:.25}}
-
-/* ── EXPANDED: floating card ──────────────────────────────── */
-.gg5-card{z-index:119;right:26px;bottom:26px;width:344px;transform:translateY(260%);
-  background:var(--forest);border:1px solid rgba(255,252,245,.16);border-radius:16px;
-  box-shadow:0 22px 60px rgba(20,40,34,.55);overflow:hidden}
-.gg5-bar{height:3px;background:var(--flag);transform-origin:left;transition:transform 1s linear}
-.gg5-pad{padding:16px 18px 18px;position:relative}
-.gg5-x{position:absolute;top:7px;right:7px;width:34px;height:34px;border:0;background:transparent;
-  color:rgba(255,252,245,.45);font-size:16px;line-height:1;cursor:pointer;border-radius:50%;z-index:3;
-  -webkit-tap-highlight-color:transparent}
-.gg5-x:hover{color:var(--cream);background:rgba(255,252,245,.1)}
-
-.gg5-exp{display:inline-flex;align-items:center;gap:7px;margin-bottom:11px;padding:5px 11px;
-  border-radius:999px;background:rgba(252,86,86,.15);border:1px solid rgba(252,86,86,.42);
-  font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.09em;
-  text-transform:uppercase;color:var(--flag)}
-.gg5-exp .gg5-blip{background:var(--flag)}
-.gg5-t{font-variant-numeric:tabular-nums;letter-spacing:.04em}
-.gg5-kicker{font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.19em;
-  text-transform:uppercase;color:var(--bunker);margin-bottom:6px}
-.gg5-line{font-family:'Anton',sans-serif;font-size:20px;text-transform:uppercase;color:var(--cream);
-  line-height:1.04;margin-bottom:4px;letter-spacing:.01em}
-.gg5-sub{font-family:'DM Sans',sans-serif;font-size:12.5px;color:rgba(255,252,245,.6);
-  line-height:1.45;margin-bottom:12px}
-.gg5-form{display:flex;border:2px solid rgba(255,252,245,.3);background:rgba(255,252,245,.07);
-  border-radius:999px;overflow:hidden;padding:4px 4px 4px 16px}
-.gg5-form input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--cream);
-  font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500}  /* 16px stops iOS zoom-on-focus */
-.gg5-form input::placeholder{color:rgba(255,252,245,.38)}
-.gg5-form button{flex:none;background:var(--flag);color:var(--cream);border:0;border-radius:999px;
-  padding:11px 17px;font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.09em;
-  text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background .2s}
-.gg5-form button:hover{background:var(--flag-deep)}
-.gg5-form button:disabled{opacity:.55}
-.gg5-err{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--flag);margin-top:7px}
-.gg5-fine{font-family:'DM Sans',sans-serif;font-size:10.5px;color:rgba(255,252,245,.3);
-  letter-spacing:.04em;margin-top:9px}
-.gg5-won .gg5-ask{display:none}
-.gg5-win{display:none}
-.gg5-won .gg5-win{display:block}
-.gg5-code{border:1px dashed rgba(255,252,245,.42);background:rgba(255,252,245,.07);padding:12px;
-  cursor:pointer;margin-bottom:11px;border-radius:10px;transition:background .2s;text-align:center}
-.gg5-code:hover{background:rgba(255,252,245,.14)}
-.gg5-code b{display:block;font-family:'Anton',sans-serif;font-size:27px;letter-spacing:.15em;
-  color:var(--cream);line-height:1}
-.gg5-code span{display:block;font-family:'DM Sans',sans-serif;font-size:9.5px;letter-spacing:.17em;
-  text-transform:uppercase;color:var(--bunker);margin-top:6px;font-weight:700}
-.gg5-buy{display:block;background:var(--flag);color:var(--cream);border-radius:999px;padding:14px 20px;
-  text-decoration:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;text-align:center;transition:background .2s}
-.gg5-buy:hover{background:var(--flag-deep)}
-.gg5-char{display:inline-block;margin-top:11px;font-family:'DM Sans',sans-serif;font-size:11px;
-  font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,252,245,.55);
-  text-decoration:none;border-bottom:1px solid rgba(255,252,245,.25);padding-bottom:2px}
-.gg5-char:hover{color:var(--cream);border-color:var(--cream)}
+.gg5-pill .gg5-blip{background:var(--cream)}
 
 body.gg5-live #float-cta{display:none!important}
+html.gg5-lock,body.gg5-lock{overflow:hidden!important}
+.gg5-scrim{touch-action:none;overscroll-behavior:contain}
+.gg5-modal{touch-action:auto}
 
-/* ── MOBILE ── lifted clear of the iOS home-indicator gesture zone ── */
+/* ── MOBILE ── pill lifted clear of the iOS swipe zone ────── */
 @media(max-width:600px){
-  .gg5-pill{right:auto;left:50%;bottom:96px;transform:translate(-50%,300%);padding:14px 22px}
+  .gg5-scrim{padding:16px;align-items:flex-end;padding-bottom:74px}
+  .gg5-modal{max-width:none}
+  .gg5-pad{padding:20px 18px 20px}
+  .gg5-line{font-size:23px}
+  .gg5-sub{font-size:12.5px;margin-bottom:13px}
+  .gg5-code b{font-size:27px}
+  .gg5-pill{right:auto;left:50%;bottom:96px;padding:14px 22px;
+    transform:translate(-50%,240%)}
   .gg5-pill.on{transform:translate(-50%,0)}
-  .gg5-pill:active{transform:translate(-50%,0) scale(.97)}
-  .gg5-card{left:12px;right:12px;bottom:84px;width:auto;border-radius:18px;transform:translateY(300%)}
-  .gg5-card.on{transform:none}
-  .gg5-pad{padding:15px 16px 17px}
-  .gg5-line{font-size:19px}
-  .gg5-sub{font-size:12px;margin-bottom:11px}
-  .gg5-code b{font-size:25px}
-  .gg5-x{width:38px;height:38px}
 }
 @media(prefers-reduced-motion:reduce){
-  .gg5-pill,.gg5-card{transition:visibility 0s}
+  .gg5-scrim,.gg5-modal,.gg5-pill{transition:opacity .01s}
   .gg5-pill.on{animation:none}
   .gg5-blip{animation:none!important}
 }
@@ -1341,7 +1355,7 @@ body.gg5-live #float-cta{display:none!important}
     code:"GIVING5", store:"https://thegivinggreen.store", redirect:"/",
     charities:"#tickets", minutes:20, delayAfterSplash:3000,
     endpoint:"/.netlify/functions/subscribe",
-    utm:"utm_source=thegivinggreen.org&utm_medium=offer&utm_campaign=giving5"
+    utm:"utm_source=thegivinggreen.org&utm_medium=modal&utm_campaign=giving5"
   };
 
   var buyHref = CFG.store + "/discount/" + encodeURIComponent(CFG.code)
@@ -1354,16 +1368,8 @@ body.gg5-live #float-cta{display:none!important}
   var t0 = parseInt(ls('gg5_t0')||'0',10);
   if(!t0){ t0 = Date.now(); ls('gg5_t0', String(t0)); }
 
-  var pill = document.createElement('button');
-  pill.className = 'gg5-pill'; pill.type = 'button';
-  pill.setAttribute('aria-label','Reopen five dollars off offer');
-  pill.innerHTML = '<span class="gg5-blip"></span>$5 Off <span class="gg5-pt">20:00</span>';
-
-  var card = document.createElement('div');
-  card.className = 'gg5-card';
-  card.setAttribute('role','dialog'); card.setAttribute('aria-label','Five dollars off your ticket');
-  card.innerHTML =
-    '<div class="gg5-bar"></div><div class="gg5-pad">'
+  var body = ''
+    + '<div class="gg5-bar"></div><div class="gg5-pad">'
     + '<button class="gg5-x" type="button" aria-label="Close">&#10005;</button>'
     + '<div class="gg5-exp"><span class="gg5-blip"></span>Offer expires in <span class="gg5-t">20:00</span></div>'
     + '<div class="gg5-ask">'
@@ -1384,44 +1390,98 @@ body.gg5-live #float-cta{display:none!important}
       + '<a class="gg5-char" href="'+CFG.charities+'">Meet the Charities</a>'
     + '</div></div>';
 
-  document.body.appendChild(pill);
-  document.body.appendChild(card);
+  var scrim = document.createElement('div');
+  scrim.className = 'gg5-scrim';
+  scrim.innerHTML = '<div class="gg5-modal" role="dialog" aria-modal="true" aria-label="Five dollars off your ticket">'+body+'</div>';
 
-  /* ============ ONE state machine. No timers. No races. ============ */
-  var state = 'none';                        // 'none' | 'card' | 'pill'
+  var pill = document.createElement('button');
+  pill.className = 'gg5-pill'; pill.type = 'button';
+  pill.setAttribute('aria-label','Reopen the five dollars off offer');
+  pill.innerHTML = '<span class="gg5-blip"></span>$5 Off <span class="gg5-pt">20:00</span>';
+
+  document.body.appendChild(scrim);
+  document.body.appendChild(pill);
+
+  var modal = scrim.querySelector('.gg5-modal');
+
+  /* ================= ONE state machine ==================
+     'modal' -> scrim on, page locked
+     'pill'  -> scrim off, page free
+     Purely class toggles. Nothing async. Idempotent.       */
+  var state = 'none';
   function setState(next){
-    if(next === state) return;               // idempotent, rapid taps are harmless
+    if(next === state) return;
     state = next;
     document.body.classList.add('gg5-live');
-    card.classList.toggle('on', next === 'card');
+    var isModal = next === 'modal';
+    scrim.classList.toggle('on', isModal);
     pill.classList.toggle('on', next === 'pill');
-    if(next === 'card'){
-      card.removeAttribute('aria-hidden'); pill.setAttribute('aria-hidden','true');
-    } else if(next === 'pill'){
-      pill.removeAttribute('aria-hidden'); card.setAttribute('aria-hidden','true');
+    lockPage(isModal);                                     /* restrict the page */
+    scrim.setAttribute('aria-hidden', isModal ? 'false' : 'true');
+    pill.setAttribute('aria-hidden', next === 'pill' ? 'false' : 'true');
+    if(isModal){
+      var f = modal.querySelector('.gg5-in') || modal.querySelector('.gg5-buy');
+      if(f) setTimeout(function(){ try{ f.focus({preventScroll:true}); }catch(e){} }, 340);
     }
   }
-  /* ================================================================= */
+  /* --- page lock. The document scrolls on <html>, not <body>, and iOS
+         Safari ignores overflow:hidden entirely, so we pin the body and
+         restore the exact scroll position on release. --- */
+  var savedY = 0, locked = false;
+  function lockPage(on){
+    if(on === locked) return;
+    locked = on;
+    var de = document.documentElement, bd = document.body;
+    if(on){
+      savedY = window.pageYOffset || de.scrollTop || 0;
+      de.classList.add('gg5-lock'); bd.classList.add('gg5-lock');
+      bd.style.position = 'fixed';
+      bd.style.top = (-savedY) + 'px';
+      bd.style.left = '0'; bd.style.right = '0'; bd.style.width = '100%';
+    } else {
+      de.classList.remove('gg5-lock'); bd.classList.remove('gg5-lock');
+      bd.style.position = ''; bd.style.top = '';
+      bd.style.left = ''; bd.style.right = ''; bd.style.width = '';
+      /* his CSS sets html{scroll-behavior:smooth}, so force an instant restore */
+      var prev = de.style.scrollBehavior;
+      de.style.scrollBehavior = 'auto';
+      window.scrollTo(0, savedY);
+      de.style.scrollBehavior = prev;
+    }
+  }
+  /* ====================================================== */
 
-  function won(){ ls('gg5_won','1'); card.classList.add('gg5-won'); }
+  function won(){ ls('gg5_won','1'); modal.classList.add('gg5-won'); }
   if(ls('gg5_won') === '1') won();
 
-  pill.addEventListener('click', function(){ setState('card'); });
-  card.querySelector('.gg5-x').addEventListener('click', function(){ setState('pill'); });
-  card.querySelector('.gg5-char').addEventListener('click', function(){ setState('pill'); });
-  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && state === 'card') setState('pill'); });
+  pill.addEventListener('click', function(){ setState('modal'); });
+  modal.querySelector('.gg5-x').addEventListener('click', function(){ setState('pill'); });
+  modal.querySelector('.gg5-char').addEventListener('click', function(){ setState('pill'); });
+  /* click the backdrop, not the card, to dismiss */
+  scrim.addEventListener('click', function(e){ if(e.target === scrim) setState('pill'); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && state === 'modal') setState('pill'); });
 
-  /* splash -> homepage -> offer */
-  function armOffer(){
+  /* keep tab focus inside the modal while it blocks the page */
+  scrim.addEventListener('keydown', function(e){
+    if(e.key !== 'Tab' || state !== 'modal') return;
+    var f = modal.querySelectorAll('button, a[href], input');
+    if(!f.length) return;
+    var first = f[0], last = f[f.length-1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  });
+
+  /* splash -> homepage -> modal */
+  function arm(){
     if(ls('gg5_won') === '1' || ss('gg5_shown') === '1'){ setState('pill'); return; }
-    ss('gg5_shown','1'); setState('card');
+    ss('gg5_shown','1'); setState('modal');
   }
   var putt = document.getElementById('putt'), fired = false;
-  function go(){ if(fired) return; fired = true; setTimeout(armOffer, CFG.delayAfterSplash); }
+  function go(){ if(fired) return; fired = true; setTimeout(arm, CFG.delayAfterSplash); }
   if(putt && getComputedStyle(putt).display !== 'none'){
     new MutationObserver(function(){ if(putt.classList.contains('away')) go(); })
       .observe(putt, {attributes:true, attributeFilter:['class']});
-    setTimeout(go, 14000);                   // fallback if the splash never signals
+    setTimeout(go, 14000);
   } else { go(); }
 
   /* countdown */
@@ -1430,17 +1490,17 @@ body.gg5-live #float-cta{display:none!important}
     var s = Math.floor(left/1000);
     var txt = left <= 0 ? 'Last call'
       : String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
-    card.querySelector('.gg5-t').textContent = txt;
+    modal.querySelector('.gg5-t').textContent = txt;
     pill.querySelector('.gg5-pt').textContent = txt;
-    card.querySelector('.gg5-bar').style.transform = 'scaleX(' + (left/TOTAL) + ')';
+    modal.querySelector('.gg5-bar').style.transform = 'scaleX(' + (left/TOTAL) + ')';
     if(left > 0) setTimeout(tick, 1000);
   })();
 
   /* submit */
-  var input = card.querySelector('.gg5-in'),
-      goBtn = card.querySelector('.gg5-go'),
-      err   = card.querySelector('.gg5-err');
-  var sending = false;
+  var input = modal.querySelector('.gg5-in'),
+      goBtn = modal.querySelector('.gg5-go'),
+      err   = modal.querySelector('.gg5-err'),
+      sending = false;
   function send(){
     if(sending) return;
     var v = (input.value||'').trim();
@@ -1450,7 +1510,7 @@ body.gg5-live #float-cta{display:none!important}
     }
     sending = true; goBtn.disabled = true; goBtn.textContent = 'Sending';
     fetch(CFG.endpoint, { method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ email:v, source:'org-offer-giving5' }) })
+      body: JSON.stringify({ email:v, source:'org-modal-giving5' }) })
       .then(function(r){ return r.json().catch(function(){ return {}; }); })
       .then(function(d){ if(!(d && d.ok)) console.warn('[gg5] subscribe failed:', d && d.error); })
       .catch(function(e){ console.warn('[gg5] network error:', e); })
@@ -1460,7 +1520,7 @@ body.gg5-live #float-cta{display:none!important}
   input.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); send(); } });
 
   /* copy */
-  var code = card.querySelector('.gg5-code');
+  var code = modal.querySelector('.gg5-code');
   function copy(){
     var lbl = code.querySelector('.gg5-cl');
     function done(){ lbl.textContent='Copied'; setTimeout(function(){ lbl.textContent='Tap to copy'; },1700); }
