@@ -500,6 +500,14 @@ footer{background:var(--shadow-ink);color:var(--cream);padding:clamp(44px,7vh,72
 
 /* Intro mobile -- massive date fills screen */
 @media(max-width:600px){
+  /* Splash lockup rides near the top on phones, the way it read in the
+     0fd42d9 build. That build only sat high by accident: the offer card
+     was an extra flex child inside #putt and pushed the lockup up 160px.
+     Once the card moved out to its own modal the lockup re-centered and
+     dropped. flex-start pins it back without depending on that child, and
+     unlike a hard centre offset it cannot clip on a short phone.
+     NEVER express this with transform. #putt.away owns transform. */
+  #putt{justify-content:flex-start;padding-top:clamp(10px,2.5vh,28px)}
   #putt svg{width:min(24vw,100px)!important}
   #putt .std-date{font-size:clamp(60px,20vw,120px)}
   #putt .std-date .yr{font-size:clamp(68px,22vw,140px)}
