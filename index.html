@@ -1127,7 +1127,7 @@ body.menu-open{overflow:hidden}
 <script>
 // Intro
 const putt = document.getElementById('putt');
-const DURATION = 5500;
+const DURATION = 99999999; // splash now waits for the user. $5 island handles handoff.
 function dismiss(){putt.classList.add('away');setTimeout(()=>putt.style.display='none',900);}
 if(matchMedia('(prefers-reduced-motion:reduce)').matches){putt.style.display='none';}
 else{setTimeout(dismiss,DURATION);putt.addEventListener('click',dismiss);}
@@ -1160,7 +1160,7 @@ document.getElementById('notify-form').addEventListener('submit',function(e){
   e.preventDefault();
   var form=e.target, msg=document.getElementById('form-msg'), btn=form.querySelector('button');
   btn.disabled=true;
-  fetch('https://formspree.io/f/mqerzedv',{method:'POST',headers:{'Accept':'application/json'},body:new FormData(form)})
+  fetch('/.netlify/functions/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:(form.querySelector('input[name="email"]')||{}).value||'',source:'org-get-on-the-card'})})
     .then(function(r){
       if(r.ok){msg.textContent="You're on the list. See you October 3 in Soulard.";form.reset();}
       else{msg.textContent="Something went wrong. Try again, or email admin@thegivinggreen.org.";}
@@ -1220,6 +1220,317 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     <text x="600" y="640" text-anchor="middle" font-family="Anton, sans-serif" font-size="76" fill="#FFFCF5" letter-spacing="2">SOULARD 2026</text>
   </svg>
 </template>
+<!-- ============ TGG $5 OFF CAPTURE (merged) ============ -->
+
+<style>
+/* uses your existing vars: --forest --fairway --sand --bunker --flag --cream --shadow-ink */
+/* FIX: nav is z-index:150 and was sitting on top of the splash, swallowing clicks
+   on anything in #putt's top-right corner. A full-screen takeover belongs above the nav. */
+#putt{z-index:200}
+body.gg5-live nav#main-nav{z-index:150}
+.gg5-offer{max-width:520px;width:100%;padding:0 24px;margin-top:26px;opacity:0;
+  animation:wordmarkIn .6s ease 3.9s forwards}
+.gg5-rule{width:min(240px,48vw);height:1px;background:rgba(255,252,245,.12);margin:0 auto 22px}
+.gg5-kicker{font-family:'DM Sans',sans-serif;font-size:clamp(10px,1.2vw,12px);font-weight:700;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--flag);margin-bottom:10px}
+.gg5-line{font-family:'Anton',sans-serif;font-size:clamp(22px,3.4vw,34px);text-transform:uppercase;
+  color:var(--cream);line-height:1.05;margin-bottom:6px;letter-spacing:.01em}
+.gg5-note{font-family:'DM Sans',sans-serif;font-size:13px;color:rgba(255,252,245,.55);margin-bottom:16px}
+
+.gg5-form{display:flex;gap:0;max-width:420px;margin:0 auto;border:2px solid rgba(255,252,245,.32);
+  background:rgba(255,252,245,.07);border-radius:999px;overflow:hidden;padding:4px 4px 4px 18px}
+.gg5-form input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--cream);
+  font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500}
+.gg5-form input::placeholder{color:rgba(255,252,245,.42)}
+.gg5-form button{flex:none;background:var(--flag);color:var(--cream);border:0;border-radius:999px;
+  padding:12px 20px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background .2s}
+.gg5-form button:hover{background:var(--flag-deep)}
+.gg5-form button:disabled{opacity:.55;cursor:default}
+.gg5-err{font-family:'DM Sans',sans-serif;font-size:12.5px;color:var(--flag);margin-top:10px;min-height:16px}
+.gg5-fine{font-family:'DM Sans',sans-serif;font-size:11px;color:rgba(255,252,245,.3);
+  letter-spacing:.06em;margin-top:12px}
+
+/* success swap */
+.gg5-won .gg5-ask{display:none}
+.gg5-win{display:none}
+.gg5-won .gg5-win{display:block;animation:wordmarkIn .5s ease forwards}
+.gg5-code{border:1px dashed rgba(255,252,245,.4);background:rgba(255,252,245,.06);padding:16px;
+  cursor:pointer;transition:background .2s;max-width:420px;margin:0 auto 16px}
+.gg5-code:hover{background:rgba(255,252,245,.13)}
+.gg5-code b{display:block;font-family:'Anton',sans-serif;font-size:clamp(30px,5vw,42px);
+  letter-spacing:.14em;color:var(--cream);line-height:1}
+.gg5-code span{display:block;font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--bunker);margin-top:8px;font-weight:700}
+.gg5-ctas{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:420px;margin:0 auto}
+.gg5-ctas a{flex:1 1 170px;text-align:center;border-radius:999px;padding:14px 20px;text-decoration:none;
+  font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  border:2px solid transparent;transition:background .2s,border-color .2s}
+.gg5-buy{background:var(--flag);color:var(--cream);border-color:var(--flag)}
+.gg5-buy:hover{background:var(--flag-deep);border-color:var(--flag-deep)}
+.gg5-char{border-color:rgba(255,252,245,.35);color:var(--cream)}
+.gg5-char:hover{background:rgba(255,252,245,.12);border-color:var(--cream)}
+
+/* close X on the splash */
+.gg5-x{position:absolute;top:18px;right:18px;width:42px;height:42px;border:0;background:transparent;
+  color:rgba(255,252,245,.4);font-size:22px;line-height:1;cursor:pointer;border-radius:50%;z-index:5;
+  opacity:0;animation:wordmarkIn .4s ease 3.9s forwards}
+.gg5-x:hover{color:var(--cream);background:rgba(255,252,245,.1)}
+
+/* floating island */
+.gg5-isl{position:fixed;right:24px;bottom:24px;z-index:120;width:340px;max-width:calc(100vw - 32px);
+  background:var(--forest);border:1px solid rgba(255,252,245,.16);
+  box-shadow:0 18px 50px rgba(20,40,34,.45);overflow:hidden;
+  transform:translateY(150%);transition:transform .5s cubic-bezier(.2,.8,.25,1)}
+.gg5-isl.on{transform:none}
+.gg5-isl[hidden]{display:none}
+.gg5-bar{height:3px;background:var(--bunker);transform-origin:left;transition:transform 1s linear}
+.gg5-pad{padding:18px 20px 20px;position:relative}
+.gg5-isl .gg5-offer{margin:0;padding:0;opacity:1;animation:none;max-width:none}
+.gg5-isl .gg5-rule{display:none}
+.gg5-isl .gg5-line{font-size:20px}
+.gg5-isl .gg5-x{top:6px;right:6px;width:32px;height:32px;font-size:17px;opacity:1;animation:none}
+.gg5-isl .gg5-ctas a{flex:1 1 100%}
+.gg5-clock{display:inline-flex;align-items:center;gap:7px;margin-bottom:12px;padding:4px 10px;
+  border:1px solid rgba(255,252,245,.24);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--cream);font-variant-numeric:tabular-nums}
+.gg5-blip{width:6px;height:6px;border-radius:50%;background:var(--flag);animation:gg5blip 1.6s ease-in-out infinite}
+@keyframes gg5blip{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* small reopen tab */
+.gg5-tab{position:fixed;right:24px;bottom:24px;z-index:119;background:var(--flag);color:var(--cream);
+  border:0;padding:13px 20px;border-radius:999px;cursor:pointer;font-family:'DM Sans',sans-serif;
+  font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  box-shadow:0 4px 24px rgba(252,86,86,.4);transform:translateY(150%);
+  transition:transform .45s cubic-bezier(.2,.8,.25,1),background .2s}
+.gg5-tab.on{transform:none}
+.gg5-tab:hover{background:var(--flag-deep)}
+.gg5-tab[hidden]{display:none}
+
+/* our island owns the bottom-right corner */
+body.gg5-live #float-cta{display:none!important}
+
+@media(max-width:600px){
+  .gg5-isl{right:0;left:0;bottom:0;width:100%;max-width:100%;border-left:0;border-right:0;border-bottom:0}
+  .gg5-tab{right:16px;bottom:16px}
+  .gg5-form{flex-direction:column;border-radius:14px;padding:6px}
+  .gg5-form input{padding:12px 12px}
+  .gg5-form button{width:100%;border-radius:10px}
+  .gg5-offer{margin-top:18px}
+}
+@media(prefers-reduced-motion:reduce){
+  .gg5-isl,.gg5-tab{transition:none}
+  .gg5-blip{animation:none}
+  .gg5-offer,.gg5-x{opacity:1;animation:none}
+}
+</style>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ========================= CONFIG ========================= */
+  var CFG = {
+    code:      "GIVING5",
+    store:     "https://thegivinggreen.store",
+    redirect:  "/",                       // store homepage IS the ticket grid.
+                                          // do NOT use /collections/gg-2026, that template is broken.
+    charities: "#tickets",                // your Choose Your Team section
+    minutes:   20,
+    endpoint:  "/.netlify/functions/subscribe",
+    utm:       "utm_source=thegivinggreen.org&utm_medium=splash&utm_campaign=giving5"
+  };
+  /* ========================================================== */
+
+  var putt = document.getElementById('putt');
+  if(!putt) return;
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches && putt.style.display === 'none') return;
+
+  var buyHref = CFG.store + "/discount/" + encodeURIComponent(CFG.code)
+              + "?redirect=" + encodeURIComponent(CFG.redirect + "?" + CFG.utm);
+
+  function store(k,v){ try{ return v===undefined ? localStorage.getItem(k) : localStorage.setItem(k,v); }catch(e){ return null; } }
+
+  var TOTAL = CFG.minutes*60*1000;
+  var t0 = parseInt(store('gg5_t0')||'0',10);
+  if(!t0){ t0 = Date.now(); store('gg5_t0', String(t0)); }
+  var alreadyWon = store('gg5_won') === '1';
+
+  /* ---------- the offer block, used in both places ---------- */
+  function offerHTML(withRule){
+    return ''
+    + (withRule ? '<div class="gg5-rule"></div>' : '')
+    + '<div class="gg5-ask">'
+      + '<div class="gg5-kicker">$5 off your ticket</div>'
+      + '<div class="gg5-line">Get on the card.</div>'
+      + '<p class="gg5-note">Drop your email, we send your code. Hole reveals and team cutoffs too.</p>'
+      + '<div class="gg5-form">'
+        + '<input type="email" class="gg5-in" placeholder="your@email.com" autocomplete="email" inputmode="email" aria-label="Email address">'
+        + '<button type="button" class="gg5-go">Get Code</button>'
+      + '</div>'
+      + '<div class="gg5-err" role="alert"></div>'
+      + '<p class="gg5-fine">No spam. Just what matters before October 3.</p>'
+    + '</div>'
+    + '<div class="gg5-win">'
+      + '<div class="gg5-kicker">You are on the card</div>'
+      + '<div class="gg5-code" role="button" tabindex="0"><b>'+CFG.code+'</b><span class="gg5-cl">Tap to copy</span></div>'
+      + '<div class="gg5-ctas">'
+        + '<a class="gg5-buy" href="'+buyHref+'">Buy Tickets</a>'
+        + '<a class="gg5-char" href="'+CFG.charities+'">Meet the Charities</a>'
+      + '</div>'
+      + '<p class="gg5-fine">Applies at checkout. Tickets only.</p>'
+    + '</div>';
+  }
+
+  /* ---------- 1. inject into the splash ---------- */
+  var box = document.createElement('div');
+  box.className = 'gg5-offer';
+  box.innerHTML = offerHTML(true);
+  putt.appendChild(box);
+
+  var x = document.createElement('button');
+  x.className = 'gg5-x'; x.setAttribute('aria-label','Close'); x.innerHTML = '&#10005;';
+  putt.appendChild(x);
+
+  var hint = putt.querySelector('.skip-hint');
+  if(hint) hint.remove();
+
+  /* The splash has a bubble-phase click-to-dismiss listener on #putt itself.
+     Stop our clicks bubbling up to it. Must be bubble phase, NOT capture:
+     a capture listener on #putt fires before the event reaches our own buttons
+     and would cancel them too. */
+  box.addEventListener('click', function(e){ e.stopPropagation(); });
+
+  /* ---------- 2. build the island ---------- */
+  var isl = document.createElement('div');
+  isl.className = 'gg5-isl'; isl.hidden = true;
+  isl.innerHTML = '<div class="gg5-bar"></div><div class="gg5-pad">'
+    + '<button class="gg5-x" aria-label="Close">&#10005;</button>'
+    + '<div class="gg5-clock"><span class="gg5-blip"></span><span class="gg5-t">20:00</span></div>'
+    + '<div class="gg5-offer">' + offerHTML(false) + '</div>'
+    + '</div>';
+  document.body.appendChild(isl);
+
+  var tab = document.createElement('button');
+  tab.className = 'gg5-tab'; tab.hidden = true; tab.innerHTML = '$5 Off &rarr;';
+  document.body.appendChild(tab);
+
+  /* ---------- state ---------- */
+  function markWon(){
+    store('gg5_won','1');
+    putt.classList.add('gg5-won');
+    isl.classList.add('gg5-won');
+  }
+  if(alreadyWon) markWon();
+
+  function showIsland(){
+    document.body.classList.add('gg5-live');
+    tab.classList.remove('on'); tab.hidden = true;
+    isl.hidden = false;
+    requestAnimationFrame(function(){ isl.classList.add('on'); });
+  }
+  function hideIsland(){
+    isl.classList.remove('on');
+    setTimeout(function(){
+      isl.hidden = true; tab.hidden = false;
+      requestAnimationFrame(function(){ tab.classList.add('on'); });
+    }, 460);
+  }
+  tab.addEventListener('click', showIsland);
+  isl.querySelector('.gg5-x').addEventListener('click', hideIsland);
+
+  /* closing the splash hands off to the island */
+  function leaveSplash(){
+    putt.classList.add('away');
+    setTimeout(function(){ putt.style.display = 'none'; showIsland(); }, 800);
+  }
+  x.addEventListener('click', function(e){ e.stopPropagation(); leaveSplash(); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      if(putt.style.display !== 'none' && !putt.classList.contains('away')) leaveSplash();
+      else if(!isl.hidden) hideIsland();
+    }
+  });
+  /* if anything else dismisses the splash, still show the island */
+  new MutationObserver(function(){
+    if(putt.classList.contains('away')) setTimeout(showIsland, 800);
+  }).observe(putt, {attributes:true, attributeFilter:['class']});
+
+  /* ---------- countdown ---------- */
+  var clockEls = isl.querySelectorAll('.gg5-t');
+  var barEl = isl.querySelector('.gg5-bar');
+  (function tick(){
+    var left = Math.max(0, TOTAL - (Date.now() - t0));
+    var s = Math.floor(left/1000);
+    var txt = left <= 0 ? 'Ending soon'
+      : String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+    for(var i=0;i<clockEls.length;i++) clockEls[i].textContent = txt;
+    if(barEl) barEl.style.transform = 'scaleX(' + (left/TOTAL) + ')';
+    if(left > 0) setTimeout(tick, 1000);
+  })();
+
+  /* ---------- submit, wired to both copies ---------- */
+  function ok(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+
+  function wire(root){
+    var input = root.querySelector('.gg5-in'),
+        go    = root.querySelector('.gg5-go'),
+        err   = root.querySelector('.gg5-err'),
+        code  = root.querySelector('.gg5-code');
+    if(!input) return;
+
+    function send(){
+      var v = (input.value||'').trim();
+      err.textContent = '';
+      if(!ok(v)){ err.textContent = 'That email does not look right.'; input.focus(); return; }
+      go.disabled = true; go.textContent = 'Sending';
+
+      fetch(CFG.endpoint, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ email:v, source:'org-splash-giving5' })
+      })
+      .then(function(r){ return r.json().catch(function(){ return {}; }); })
+      .then(function(d){ if(!(d && d.ok)) console.warn('[gg5] subscribe failed:', d && d.error); })
+      .catch(function(e){ console.warn('[gg5] network error:', e); })
+      .then(function(){
+        go.disabled = false; go.textContent = 'Get Code';
+        markWon();                                  // always give them the code
+      });
+    }
+
+    go.addEventListener('click', send);
+    input.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); send(); } });
+
+    if(code){
+      function copy(){
+        var lbl = code.querySelector('.gg5-cl');
+        function done(){ lbl.textContent = 'Copied'; setTimeout(function(){ lbl.textContent = 'Tap to copy'; }, 1800); }
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(CFG.code).then(done).catch(function(){});
+        } else {
+          var ta = document.createElement('textarea'); ta.value = CFG.code;
+          document.body.appendChild(ta); ta.select();
+          try{ document.execCommand('copy'); done(); }catch(e){}
+          document.body.removeChild(ta);
+        }
+      }
+      code.addEventListener('click', copy);
+      code.addEventListener('keydown', function(e){ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); copy(); } });
+    }
+  }
+  wire(box);
+  wire(isl);
+
+  /* charity links inside the island should close it and scroll */
+  isl.querySelectorAll('.gg5-char').forEach(function(a){
+    a.addEventListener('click', function(){ hideIsland(); });
+  });
+
+})();
+</script>
+<!-- ══════════════════ END $5 OFF CAPTURE ══════════════════ -->
+
 </body>
 </html>
 <style id="__om-edit-overrides">
