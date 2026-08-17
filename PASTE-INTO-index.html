@@ -1,0 +1,236 @@
+<!-- ============================================================
+     THE GIVING GREEN  ·  $5 OFF EMAIL CAPTURE ISLAND  ·  v2 Mailchimp
+     Paste immediately before </body> in index.html.
+     Delete your existing auto-dismissing "Saturday, October 3rd" modal.
+     Requires netlify/functions/subscribe.js in the same repo.
+     ============================================================ -->
+
+<style>
+.gg5-island,.gg5-island *{box-sizing:border-box}
+.gg5-island{
+  --gg-forest:#1E3A32; --gg-sand:#F5F0E8; --gg-mid:#7E8672; --gg-flag:#FC5656;
+  position:fixed; z-index:99998; right:22px; bottom:22px; width:370px; max-width:calc(100vw - 32px);
+  background:var(--gg-forest); color:var(--gg-sand);
+  font:400 15px/1.55 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  box-shadow:0 18px 50px rgba(0,0,0,.34); border:1px solid rgba(245,240,232,.14);
+  transform:translateY(140%); opacity:0;
+  transition:transform .55s cubic-bezier(.2,.8,.25,1),opacity .4s ease; overflow:hidden;
+}
+.gg5-island.gg5-in{transform:none;opacity:1}
+.gg5-island[hidden]{display:none}
+.gg5-bar{height:3px;background:var(--gg-mid);width:100%;transform-origin:left;transition:transform 1s linear}
+.gg5-body{padding:20px 22px 22px}
+.gg5-x{position:absolute;top:10px;right:10px;width:30px;height:30px;border:0;background:transparent;
+  color:var(--gg-sand);opacity:.55;cursor:pointer;font-size:19px;line-height:1;border-radius:50%}
+.gg5-x:hover{opacity:1;background:rgba(245,240,232,.1)}
+.gg5-eyebrow{font-size:10px;letter-spacing:.24em;text-transform:uppercase;font-weight:800;color:var(--gg-mid)}
+.gg5-h{font-size:23px;line-height:1.12;font-weight:800;letter-spacing:-.02em;margin:9px 0 0;color:#fff}
+.gg5-p{font-size:14px;color:#C6D2CA;margin:9px 0 0}
+.gg5-timer{display:inline-flex;align-items:center;gap:7px;margin-top:14px;padding:5px 11px;
+  border:1px solid rgba(245,240,232,.26);font-variant-numeric:tabular-nums;
+  font-size:12px;letter-spacing:.1em;font-weight:800;text-transform:uppercase}
+.gg5-dot{width:6px;height:6px;border-radius:50%;background:var(--gg-flag);animation:gg5pulse 1.6s ease-in-out infinite}
+@keyframes gg5pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.gg5-form{display:flex;gap:8px;margin-top:16px}
+.gg5-form input[type=email]{flex:1;min-width:0;padding:13px 14px;border:1px solid rgba(245,240,232,.3);
+  background:rgba(245,240,232,.07);color:#fff;font-size:15px;font-family:inherit;border-radius:0}
+.gg5-form input[type=email]::placeholder{color:rgba(198,210,202,.65)}
+.gg5-form input[type=email]:focus{outline:2px solid var(--gg-mid);outline-offset:-1px;background:rgba(245,240,232,.12)}
+.gg5-go{padding:13px 18px;border:0;background:var(--gg-sand);color:var(--gg-forest);cursor:pointer;
+  font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-family:inherit;white-space:nowrap}
+.gg5-go:hover{background:#fff}
+.gg5-go:disabled{opacity:.5;cursor:default}
+.gg5-fine{font-size:11px;color:rgba(198,210,202,.72);margin-top:10px}
+.gg5-err{font-size:12.5px;color:var(--gg-flag);margin-top:9px;display:none}
+.gg5-err.gg5-on{display:block}
+.gg5-win{display:none}
+.gg5-island.gg5-done .gg5-ask{display:none}
+.gg5-island.gg5-done .gg5-win{display:block;animation:gg5up .5s cubic-bezier(.2,.8,.25,1)}
+@keyframes gg5up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.gg5-code{margin-top:14px;border:1px dashed rgba(245,240,232,.4);padding:15px;text-align:center;
+  cursor:pointer;background:rgba(245,240,232,.06);transition:background .2s ease}
+.gg5-code:hover{background:rgba(245,240,232,.12)}
+.gg5-code b{display:block;font-size:30px;font-weight:800;letter-spacing:.12em;color:#fff;line-height:1}
+.gg5-code span{display:block;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gg-mid);margin-top:8px;font-weight:800}
+.gg5-ctas{display:grid;gap:8px;margin-top:14px}
+.gg5-btn{display:block;text-align:center;padding:14px;text-decoration:none;font-weight:800;
+  font-size:13px;letter-spacing:.11em;text-transform:uppercase;font-family:inherit}
+.gg5-btn.gg5-primary{background:var(--gg-sand);color:var(--gg-forest)}
+.gg5-btn.gg5-primary:hover{background:#fff}
+.gg5-btn.gg5-ghost{border:1px solid rgba(245,240,232,.34);color:var(--gg-sand)}
+.gg5-btn.gg5-ghost:hover{border-color:var(--gg-sand);background:rgba(245,240,232,.08)}
+.gg5-tab{position:fixed;z-index:99997;right:22px;bottom:22px;background:var(--gg-forest);color:var(--gg-sand);
+  border:1px solid rgba(245,240,232,.2);padding:12px 17px;cursor:pointer;font-weight:800;font-size:12px;
+  letter-spacing:.12em;text-transform:uppercase;box-shadow:0 10px 30px rgba(0,0,0,.28);
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  transform:translateY(140%);transition:transform .45s cubic-bezier(.2,.8,.25,1)}
+.gg5-tab.gg5-in{transform:none}
+.gg5-tab[hidden]{display:none}
+@media(max-width:620px){
+  .gg5-island{right:0;left:0;bottom:0;width:100%;max-width:100%;border-left:0;border-right:0;border-bottom:0}
+  .gg5-form{flex-direction:column}
+  .gg5-go{width:100%}
+  .gg5-tab{right:12px;bottom:12px}
+}
+@media(prefers-reduced-motion:reduce){
+  .gg5-island,.gg5-tab{transition:none}
+  .gg5-dot{animation:none}
+  .gg5-island.gg5-done .gg5-win{animation:none}
+}
+</style>
+
+<div class="gg5-island" id="gg5" role="dialog" aria-live="polite" aria-label="Five dollars off your ticket">
+  <div class="gg5-bar" id="gg5bar"></div>
+  <button class="gg5-x" id="gg5x" aria-label="Close">&#10005;</button>
+  <div class="gg5-body">
+
+    <div class="gg5-ask">
+      <div class="gg5-eyebrow">Saturday, October 3 &middot; Soulard</div>
+      <h2 class="gg5-h">Take $5 off your ticket.</h2>
+      <p class="gg5-p">Drop your email and we will send your code. You will also be first to hear the hole reveals and the team cutoffs.</p>
+      <div class="gg5-timer"><span class="gg5-dot"></span><span id="gg5clock">20:00</span></div>
+      <div class="gg5-form">
+        <input type="email" id="gg5email" placeholder="you@email.com" autocomplete="email" inputmode="email" aria-label="Email address">
+        <button class="gg5-go" id="gg5go">Get Code</button>
+      </div>
+      <div class="gg5-err" id="gg5err"></div>
+      <p class="gg5-fine">One email. No spam. Unsubscribe whenever.</p>
+    </div>
+
+    <div class="gg5-win">
+      <div class="gg5-eyebrow">You are in</div>
+      <h2 class="gg5-h">Here is your code.</h2>
+      <div class="gg5-code" id="gg5copy" role="button" tabindex="0" aria-label="Copy discount code">
+        <b id="gg5codetext">GIVING5</b><span id="gg5copylbl">Tap to copy</span>
+      </div>
+      <div class="gg5-ctas">
+        <a class="gg5-btn gg5-primary" id="gg5buy" href="#">Buy Tickets</a>
+        <a class="gg5-btn gg5-ghost" id="gg5charities" href="#charities">Meet the Charities</a>
+      </div>
+      <p class="gg5-fine">Applies automatically at checkout. Tickets only.</p>
+    </div>
+
+  </div>
+</div>
+
+<button class="gg5-tab" id="gg5tab" hidden>$5 Off &rarr;</button>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ================= CONFIG ================= */
+  var CFG = {
+    code:          "GIVING5",
+    store:         "https://thegivinggreen.store",
+    redirectPath:  "/",                 // store homepage IS the ticket grid.
+                                        // do not use /collections/gg-2026, that template is broken.
+    charitiesHref: "#charities",        // change to your real anchor
+    minutes:       20,
+    endpoint:      "/.netlify/functions/subscribe",
+    showAfterMs:   1200,
+    utm:           "utm_source=thegivinggreen.org&utm_medium=modal&utm_campaign=giving5"
+  };
+  /* ========================================== */
+
+  var island = document.getElementById('gg5'),
+      tab    = document.getElementById('gg5tab'),
+      bar    = document.getElementById('gg5bar'),
+      clock  = document.getElementById('gg5clock'),
+      email  = document.getElementById('gg5email'),
+      go     = document.getElementById('gg5go'),
+      err    = document.getElementById('gg5err'),
+      copyEl = document.getElementById('gg5copy'),
+      buy    = document.getElementById('gg5buy');
+
+  document.getElementById('gg5codetext').textContent = CFG.code;
+  document.getElementById('gg5charities').setAttribute('href', CFG.charitiesHref);
+  buy.href = CFG.store + "/discount/" + encodeURIComponent(CFG.code)
+           + "?redirect=" + encodeURIComponent(CFG.redirectPath + "?" + CFG.utm);
+
+  function get(k){ try{ return window.localStorage.getItem(k); }catch(e){ return null; } }
+  function set(k,v){ try{ window.localStorage.setItem(k,v); }catch(e){} }
+
+  var TOTAL = CFG.minutes*60*1000;
+  var startedAt = parseInt(get('gg5_started')||'0',10);
+  if(!startedAt){ startedAt = Date.now(); set('gg5_started', String(startedAt)); }
+
+  function open(){
+    island.hidden=false; tab.hidden=true; tab.classList.remove('gg5-in');
+    requestAnimationFrame(function(){ island.classList.add('gg5-in'); });
+  }
+  function close(){
+    island.classList.remove('gg5-in');
+    setTimeout(function(){
+      island.hidden=true; tab.hidden=false;
+      requestAnimationFrame(function(){ tab.classList.add('gg5-in'); });
+    },420);
+  }
+  document.getElementById('gg5x').addEventListener('click', close);
+  tab.addEventListener('click', open);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !island.hidden) close(); });
+
+  function win(){ island.classList.add('gg5-done'); set('gg5_done','1'); }
+  if(get('gg5_done')==='1') win();
+
+  function tick(){
+    var left = Math.max(0, TOTAL - (Date.now()-startedAt));
+    var s = Math.floor(left/1000);
+    clock.textContent = left<=0 ? "Ending soon"
+      : String(Math.floor(s/60)).padStart(2,'0')+":"+String(s%60).padStart(2,'0');
+    bar.style.transform = "scaleX("+(left/TOTAL)+")";
+    if(left>0) setTimeout(tick,1000);
+  }
+  tick();
+
+  function valid(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+
+  function submit(){
+    var v = (email.value||'').trim();
+    err.classList.remove('gg5-on');
+    if(!valid(v)){ err.textContent="That email does not look right."; err.classList.add('gg5-on'); email.focus(); return; }
+
+    go.disabled=true; go.textContent="Sending";
+
+    fetch(CFG.endpoint, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ email:v, source:"org-modal-giving5" })
+    })
+    .then(function(r){ return r.json().catch(function(){ return {}; }); })
+    .then(function(d){
+      if(d && d.ok){ win(); return; }
+      // Mailchimp refused. Still give them the code, log it for us.
+      console.warn('[gg5] subscribe failed:', d && d.error);
+      win();
+    })
+    .catch(function(e){
+      console.warn('[gg5] network error:', e);
+      win();
+    })
+    .then(function(){ go.disabled=false; go.textContent="Get Code"; });
+  }
+
+  go.addEventListener('click', submit);
+  email.addEventListener('keydown', function(e){ if(e.key==='Enter') submit(); });
+
+  function copyCode(){
+    var lbl=document.getElementById('gg5copylbl');
+    function ok(){ lbl.textContent="Copied"; setTimeout(function(){ lbl.textContent="Tap to copy"; },1800); }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(CFG.code).then(ok).catch(function(){});
+    } else {
+      var t=document.createElement('textarea'); t.value=CFG.code;
+      document.body.appendChild(t); t.select();
+      try{ document.execCommand('copy'); ok(); }catch(e){}
+      document.body.removeChild(t);
+    }
+  }
+  copyEl.addEventListener('click', copyCode);
+  copyEl.addEventListener('keydown', function(e){ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); copyCode(); } });
+
+  setTimeout(open, CFG.showAfterMs);
+})();
+</script>
+<!-- ==================== END $5 OFF ISLAND ==================== -->
